@@ -1,8 +1,8 @@
-package introduction.drawers;
+package introduction.drawers.robots;
 
-import introduction.FancyRightTurner;
-import introduction.figures.Figure;
-import introduction.figures.Rectangle;
+import introduction.drawers.figures.Figure;
+import introduction.drawers.figures.Rectangle;
+import introduction.rightturner.FancyRightTurner;
 import kareltherobot.Directions;
 
 public class RectangleDrawerRobot extends FancyRightTurner implements Drawer {
@@ -14,8 +14,7 @@ public class RectangleDrawerRobot extends FancyRightTurner implements Drawer {
 	public void draw(Figure figure) {
 
 		if (!(figure instanceof Rectangle)) {
-			System.err.println("Unsupported parameter type");
-			return;
+			throw new IllegalArgumentException("Unsupported parameter type");
 		}
 		Rectangle rectangle = (Rectangle) figure;
 
@@ -23,7 +22,7 @@ public class RectangleDrawerRobot extends FancyRightTurner implements Drawer {
 		turnTo(Directions.East);
 
 		for (int i = 0; i < 4; i++) {
-			int size = i % 2 == 0 ? rectangle.getX() : rectangle.getY();
+			int size = i % 2 == 0 ? rectangle.getWidth() : rectangle.getHeight();
 
 			for (int j = 0; j < size; j++) {
 				super.putBeeper();

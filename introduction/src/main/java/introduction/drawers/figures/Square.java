@@ -1,14 +1,12 @@
-package introduction.figures;
+package introduction.drawers.figures;
 
 public class Square extends Figure {
 	private int width;
 
 	public Square(int x, int y, int width) {
-
 		this.width = width;
 		this.x = x;
 		this.y = y;
-
 	}
 
 	public int getWidth() {

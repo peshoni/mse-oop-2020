@@ -1,4 +1,4 @@
-package introduction;
+package introduction.rightturner;
 
 public interface RightTurner {
 	public void turnRight();

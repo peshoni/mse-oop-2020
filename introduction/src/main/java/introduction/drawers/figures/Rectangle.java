@@ -1,4 +1,4 @@
-package introduction.figures;
+package introduction.drawers.figures;
 
 public class Rectangle extends Square {
 	private int height;

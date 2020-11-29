@@ -1,4 +1,4 @@
-package introduction;
+package introduction.rightturner;
 
 import kareltherobot.Directions;
 import kareltherobot.Robot;
@@ -62,11 +62,13 @@ public class FancyRightTurner extends Robot implements RightTurner {
 	}
 
 	public void turnTo(Direction direction) {
-
+		while (direction != getDirection()) {
+			turnLeft();
+		}
 	}
 
 	public void moveTo(int x, int y) {
-		// shift X until robot is positioned
+		// Shift X until robot is positioned
 		if (x < getAvenue()) {
 			while (!facingWest()) {
 				turnLeft();
@@ -82,8 +84,7 @@ public class FancyRightTurner extends Robot implements RightTurner {
 				move();
 			}
 		}
-
-		// shift Y until robot is positioned
+		// Shift Y until robot is positioned
 		if (y > getStreet()) {
 			while (!facingNorth()) {
 				turnLeft();
@@ -101,6 +102,19 @@ public class FancyRightTurner extends Robot implements RightTurner {
 		}
 	}
 
+	public Direction getDirection() {
+		if (facingWest()) {
+			return Directions.West;
+		} else if (facingEast()) {
+			return Directions.East;
+		} else if (facingNorth()) {
+			return Directions.North;
+		} else if (facingSouth()) {
+			return Directions.South;
+		}
+		return null;
+	}
+
 	public int getStreet() {
 		return street;
 	}
@@ -115,19 +129,6 @@ public class FancyRightTurner extends Robot implements RightTurner {
 
 	public void setAvenue(int avenue) {
 		this.avenue = avenue;
-	}
-
-	public Direction getDirection() {
-		if (facingWest()) {
-			return Directions.West;
-		} else if (facingEast()) {
-			return Directions.East;
-		} else if (facingNorth()) {
-			return Directions.North;
-		} else if (facingSouth()) {
-			return Directions.South;
-		}
-		return null;
 	}
 
 }

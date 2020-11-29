@@ -1,7 +1,7 @@
 /**
  * 
  */
-package introduction;
+package introduction.rightturner;
 
 import kareltherobot.Directions;
 import kareltherobot.World;

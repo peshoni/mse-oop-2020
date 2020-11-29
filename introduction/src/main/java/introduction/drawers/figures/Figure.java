@@ -1,4 +1,4 @@
-package introduction.figures;
+package introduction.drawers.figures;
 
 public abstract class Figure {
 	int x;

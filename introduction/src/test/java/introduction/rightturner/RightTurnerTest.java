@@ -1,10 +1,10 @@
 package introduction.rightturner;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import introduction.FancyRightTurner;
 import kareltherobot.Directions;
 import kareltherobot.World;
 
@@ -29,12 +29,18 @@ public class RightTurnerTest {
 
 	@Test
 	public void testMoveTo() {
-		World.setSize(5, 5);
+		World.setSize(10, 10);
 		World.setDelay(0);
 		FancyRightTurner robot = new FancyRightTurner(1, 1, Directions.East);
 		robot.moveTo(3, 3);
-		assertTrue(3 == robot.getStreet());
-		assertTrue(3 == robot.getAvenue());
+		assertEquals(3, robot.getStreet());
+		assertEquals(3, robot.getAvenue());
+		robot.moveTo(1, 1);
+		assertEquals(1, robot.getStreet());
+		assertEquals(1, robot.getAvenue());
+		robot.moveTo(4, 3);
+		assertEquals(3, robot.getStreet());
+		assertEquals(4, robot.getAvenue());
 	}
 
 	@Test

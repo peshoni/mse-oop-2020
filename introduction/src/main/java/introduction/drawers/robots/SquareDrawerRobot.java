@@ -1,17 +1,12 @@
-package introduction.drawers;
+package introduction.drawers.robots;
 
-import introduction.FancyRightTurner;
-import introduction.figures.Figure;
-import introduction.figures.Square;
+import introduction.drawers.figures.Figure;
+import introduction.drawers.figures.Rectangle;
+import introduction.drawers.figures.Square;
+import introduction.rightturner.FancyRightTurner;
 import kareltherobot.Directions;
 
 public class SquareDrawerRobot extends FancyRightTurner implements Drawer {
-
-	public SquareDrawerRobot(int street, int avenue, Direction direction) {
-		super(street, avenue, direction);
-		this.setStreet(street);
-		this.setAvenue(avenue);
-	}
 
 	public SquareDrawerRobot(int street, int avenue, Direction direction, int beepers) {
 		super(street, avenue, direction, beepers);
@@ -26,9 +21,8 @@ public class SquareDrawerRobot extends FancyRightTurner implements Drawer {
 	 */
 
 	public void draw(Figure figure) {
-		if (!(figure instanceof Square)) {
-			System.err.println("Unsupported parameter type");
-			return;
+		if (!(figure instanceof Rectangle)) {
+			throw new IllegalArgumentException("Unsupported parameter type");
 		}
 		Square square = (Square) figure;
 
