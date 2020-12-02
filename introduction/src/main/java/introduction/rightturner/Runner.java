@@ -3,6 +3,12 @@
  */
 package introduction.rightturner;
 
+import introduction.drawers.builders.HouseBuldersManager;
+import introduction.drawers.builders.MasonRobot;
+import introduction.drawers.builders.RoofBuilderRobot;
+import introduction.drawers.builders.WindowAnDoorBuilderRobot;
+import introduction.drawers.figures.Rectangle;
+import introduction.drawers.figures.Triangle;
 import kareltherobot.Directions;
 import kareltherobot.World;
 
@@ -16,17 +22,31 @@ public class Runner {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		World.setSize(5, 5);
+		World.setSize(25, 40);
 		World.setVisible();
-		FancyRightTurner robot = new FancyRightTurner(1, 1, Directions.East);
-		robot.move();
-		robot.turnLeft();
-		robot.move();
-		robot.turnLeft();
-		robot.move();
-		robot.turnLeft();
-		robot.move();
+		World.setDelay(3);
 
+		HouseBuldersManager builderManager = new HouseBuldersManager();
+		MasonRobot masonRobot = new MasonRobot(1, 5, Directions.North, 60);
+		WindowAnDoorBuilderRobot windowRobot = new WindowAnDoorBuilderRobot(1, 4, Directions.North, 60);
+		WindowAnDoorBuilderRobot doorRobot = new WindowAnDoorBuilderRobot(1, 3, Directions.North, 60);
+		WindowAnDoorBuilderRobot seconmdWindowRobot = new WindowAnDoorBuilderRobot(1, 2, Directions.North, 60);
+		RoofBuilderRobot roofBuilder = new RoofBuilderRobot(1, 1, Directions.North, 60);
+
+		Rectangle mason = new Rectangle(7, 1, 20, 10);
+		Rectangle window = new Rectangle(9, 5, 4, 4);
+		Rectangle door = new Rectangle(15, 1, 4, 8);
+		Rectangle secondWindow = new Rectangle(21, 5, 4, 4);
+		Triangle roof = new Triangle(4, 11, mason.getWidth() + 6, 13);
+
+		masonRobot.setTask(mason);
+		windowRobot.setTask(window);
+		doorRobot.setTask(door);
+		seconmdWindowRobot.setTask(secondWindow);
+		roofBuilder.setTask(roof);
+
+		builderManager.addBuilders(masonRobot, windowRobot, doorRobot, seconmdWindowRobot, roofBuilder);
+		builderManager.buildHouse();
+		builderManager.sendTheBuildersIntoTheHouse(door);
 	}
-
 }

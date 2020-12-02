@@ -1,5 +1,6 @@
 package introduction.rightturner;
 
+import introduction.drawers.figures.Figure;
 import kareltherobot.Directions;
 import kareltherobot.Robot;
 
@@ -11,21 +12,27 @@ import kareltherobot.Robot;
 public class FancyRightTurner extends Robot implements RightTurner {
 	private int street;
 	private int avenue;
-	private Direction direction;
+	private int originX;
+	private int originY;
+	private Figure task;
 
 	/**
 	 * Creates new Robot
 	 * 
 	 * @param street    the starting X
-	 * @param avenue    the starttin Y
+	 * @param avenue    the starting Y
 	 * @param direction the direction the robot is initially facing
 	 */
 	public FancyRightTurner(int street, int avenue, Direction direction) {
 		super(street, avenue, direction, 0);
+		this.originX = avenue;
+		this.originY = street;
 	}
 
 	public FancyRightTurner(int street, int avenue, Direction direction, int beepers) {
 		super(street, avenue, direction, beepers);
+		this.originX = avenue;
+		this.originY = street;
 	}
 
 	/**
@@ -115,6 +122,14 @@ public class FancyRightTurner extends Robot implements RightTurner {
 		return null;
 	}
 
+	/**
+	 * Moves robot to his starting point and turns it to north.
+	 */
+	public void goToStartingPosition() {
+		moveTo(originX, originY);
+		turnTo(Directions.North);
+	}
+
 	public int getStreet() {
 		return street;
 	}
@@ -131,4 +146,19 @@ public class FancyRightTurner extends Robot implements RightTurner {
 		this.avenue = avenue;
 	}
 
+	public Figure getTask() {
+		return task;
+	}
+
+	public void setTask(Figure task) {
+		this.task = task;
+	}
+
+	public int getOriginX() {
+		return originX;
+	}
+
+	public int getOriginY() {
+		return originY;
+	}
 }

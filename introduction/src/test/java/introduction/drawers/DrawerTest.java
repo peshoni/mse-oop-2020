@@ -2,9 +2,7 @@ package introduction.drawers;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import introduction.drawers.figures.Rectangle;
 import introduction.drawers.figures.Square;
@@ -14,8 +12,6 @@ import kareltherobot.Directions;
 import kareltherobot.World;
 
 public class DrawerTest {
-	@Rule
-	public final ExpectedException exception = ExpectedException.none();
 
 	@Test
 	public void testSquareDrawer() {

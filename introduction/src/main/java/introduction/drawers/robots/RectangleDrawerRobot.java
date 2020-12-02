@@ -31,6 +31,5 @@ public class RectangleDrawerRobot extends FancyRightTurner implements Drawer {
 			turnLeft();
 		}
 		turnRight();
-
 	}
 }
