@@ -18,6 +18,7 @@ public class AnnoRunner {
 			Order annotationB = (Order) fa.getClass().getAnnotations()[0];
 			return annotationA.value() - annotationB.value();
 		};
+
 		fishes.sort(fishComparator);
 
 		System.out.println(fishes);
