@@ -1,7 +1,7 @@
 /**
  * 
  */
-package design_patterns.proxy;
+package com.edu.oop.patterns.proxy;
 
 /**
  * @author Petar Ivanov - petarivanovgap@gmail.com/pesho02@abv.bg

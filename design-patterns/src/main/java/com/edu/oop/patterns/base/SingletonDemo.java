@@ -1,7 +1,7 @@
 /**
  * 
  */
-package design_patterns;
+package com.edu.oop.patterns.base;
 
 /**
  * @author Petar Ivanov - petarivanovgap@gmail.com/pesho02@abv.bg

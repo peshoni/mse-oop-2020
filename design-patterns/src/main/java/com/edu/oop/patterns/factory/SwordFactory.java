@@ -1,10 +1,10 @@
-package design_patterns.factory;
+package com.edu.oop.patterns.factory;
 
-import bridge_design_pattern.IntelectEnchantment;
-import bridge_design_pattern.Staff;
-import bridge_design_pattern.StrengthEnchantment;
-import bridge_design_pattern.Sword;
-import bridge_design_pattern.Weapon;
+import com.edu.oop.patterns.IntelectEnchantment;
+import com.edu.oop.patterns.Staff;
+import com.edu.oop.patterns.StrengthEnchantment;
+import com.edu.oop.patterns.Sword;
+import com.edu.oop.patterns.Weapon;
 
 public class SwordFactory {
 

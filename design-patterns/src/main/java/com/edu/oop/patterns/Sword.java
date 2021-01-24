@@ -1,4 +1,4 @@
-package bridge_design_pattern;
+package com.edu.oop.patterns;
 
 public class Sword extends Weapon {
 

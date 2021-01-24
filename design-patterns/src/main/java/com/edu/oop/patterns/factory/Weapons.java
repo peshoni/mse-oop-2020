@@ -1,4 +1,4 @@
-package design_patterns.factory;
+package com.edu.oop.patterns.factory;
 
 public enum Weapons {
 	SWORD, STAFF

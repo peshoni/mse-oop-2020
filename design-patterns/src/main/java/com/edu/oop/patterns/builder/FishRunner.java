@@ -1,4 +1,4 @@
-package design_patterns.builder;
+package com.edu.oop.patterns.builder;
 
 public class FishRunner {
 	public static void main(String[] args) {

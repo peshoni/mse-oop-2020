@@ -1,7 +1,7 @@
 /**
  * 
  */
-package bridge_design_pattern;
+package com.edu.oop.patterns;
 
 /**
  * @author Petar Ivanov - petarivanovgap@gmail.com/pesho02@abv.bg

@@ -1,4 +1,4 @@
-package design_patterns.proxy;
+package com.edu.oop.patterns.proxy;
 
 import java.util.ArrayList;
 import java.util.List;

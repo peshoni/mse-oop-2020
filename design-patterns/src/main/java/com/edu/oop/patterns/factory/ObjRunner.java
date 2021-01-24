@@ -1,9 +1,9 @@
 /**
  * 
  */
-package design_patterns.factory;
+package com.edu.oop.patterns.factory;
 
-import bridge_design_pattern.Weapon;
+import com.edu.oop.patterns.Weapon;
 
 /**
  * @author Petar Ivanov - petarivanovgap@gmail.com/pesho02@abv.bg
