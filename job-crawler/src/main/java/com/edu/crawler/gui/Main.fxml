@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="525.0" prefWidth="779.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mse.pesho.crawler.gui.MainController">
+   <children>
+      <BorderPane prefHeight="200.0" prefWidth="200.0">
+         <top>
+            <MenuBar prefHeight="20.0" prefWidth="629.0" BorderPane.alignment="CENTER">
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Close" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Delete" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+         </top>
+         <bottom>
+            <GridPane prefHeight="165.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+              <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" />
+                <ColumnConstraints hgrow="NEVER" maxWidth="295.0" minWidth="10.0" prefWidth="81.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+
+              </rowConstraints>
+               <children>
+                  <GridPane prefHeight="165.0" prefWidth="97.0" GridPane.columnIndex="1" GridPane.vgrow="SOMETIMES">
+                    <columnConstraints>
+                        <ColumnConstraints />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="27.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="89.0" minHeight="8.0" prefHeight="28.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="104.0" minHeight="10.0" prefHeight="84.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Button fx:id="btnDownload" mnemonicParsing="false" prefHeight="100" prefWidth="100" text="download" GridPane.rowIndex="3" />
+                        <Button fx:id="btnStop" mnemonicParsing="false" prefHeight="100" prefWidth="100" text="stop" GridPane.rowIndex="1" />
+                       
+                     </children>
+                     <GridPane.margin>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                     </GridPane.margin>
+                  </GridPane>
+                  <TextArea fx:id="resultTextArea" editable="false" focusTraversable="false" prefHeight="165.0" prefWidth="461.0" promptText="result" wrapText="true" />
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="10.0" top="5.0" />
+               </BorderPane.margin>
+            </GridPane>
+         </bottom>
+         <center>
+            <TableView fx:id="sitesTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+              <columns>
+<!--                <TableColumn minWidth="-Infinity" prefWidth="64.0" text="checkColumn" />-->
+<!--                <TableColumn prefWidth="285.0" text="siteName" />-->
+<!--                <TableColumn prefWidth="96.0" text="siteType" />-->
+<!--                <TableColumn prefWidth="94.0" text="itemsPerLoad" />-->
+<!--                <TableColumn prefWidth="55.0" text="spinnerColumn" />-->
+              </columns>
+            </TableView>
+         </center>
+      </BorderPane>
+   </children>
+</StackPane>

@@ -96,7 +96,7 @@ public class GUI implements ActionListener {
 
 	private Object[] buildTbleObjectDataForStudent(Student s) {
 		s.calculateAverageScore();
-		double[] sc = s.getScores();
+		int[] sc = s.getScores();
 		Object[] data = { s.getFirstName(), s.getLastName(), s.getEGN(), s.getHeight(), s.getWeight(),
 				s.getFacultyNumber(), sc[0], sc[1], sc[2], sc[3], sc[4], s.getAverageScore(), s.getImageHeight(),
 				s.getImageWidth() };
@@ -212,14 +212,14 @@ public class GUI implements ActionListener {
 
 				student.setHeight(getDoubleFromTextField(height));
 				student.setWeight(getDoubleFromTextField(weight));
-				student.setFacultyNumber(Integer.parseInt(fakNum.getText()));
+				student.setFacultyNumber(fakNum.getText());
 
-				double[] scores = new double[5];
-				scores[0] = getDoubleFromTextField(ocenka1);
-				scores[1] = getDoubleFromTextField(ocenka2);
-				scores[2] = getDoubleFromTextField(ocenka3);
-				scores[3] = getDoubleFromTextField(ocenka4);
-				scores[4] = getDoubleFromTextField(ocenka5);
+				int[] scores = new int[5];
+				scores[0] = getIntFromTextField(ocenka1);
+				scores[1] = getIntFromTextField(ocenka2);
+				scores[2] = getIntFromTextField(ocenka3);
+				scores[3] = getIntFromTextField(ocenka4);
+				scores[4] = getIntFromTextField(ocenka5);
 				student.setScores(scores);
 				student.setImageHeight(getDoubleFromTextField(imageHeight));
 				student.setImageWidth(getDoubleFromTextField(imageWidth));
@@ -237,5 +237,9 @@ public class GUI implements ActionListener {
 
 	private double getDoubleFromTextField(JTextField textField) {
 		return Double.parseDouble(textField.getText().trim());
+	}
+
+	private int getIntFromTextField(JTextField textField) {
+		return Integer.parseInt(textField.getText().trim());
 	}
 }

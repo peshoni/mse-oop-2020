@@ -10,8 +10,8 @@ import com.edu.oop.infosys.utils.InfoSysUtil;
  *
  */
 public class Student extends Human {
-	private int facultyNumber;
-	private double[] scores = new double[5];
+	private String facultyNumber;
+	private int[] scores = new int[5];
 	private double averageScore;
 	private final String space = "\s";
 	private final String tab = "\t";
@@ -36,19 +36,19 @@ public class Student extends Human {
 	}
 
 	// Getters and setters
-	public int getFacultyNumber() {
+	public String getFacultyNumber() {
 		return facultyNumber;
 	}
 
-	public void setFacultyNumber(int facultyNumber) {
+	public void setFacultyNumber(String facultyNumber) {
 		this.facultyNumber = facultyNumber;
 	}
 
-	public double[] getScores() {
+	public int[] getScores() {
 		return scores;
 	}
 
-	public Student setScores(double[] scores) {
+	public Student setScores(int[] scores) {
 		if (scores.length > 5)
 			throw new RuntimeException("the student can have only 5 ratings");
 		this.scores = scores;

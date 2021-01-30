@@ -68,13 +68,13 @@ public class StudentManager {
 		student.setEGN(arr[1]);
 		student.setHeight(Double.parseDouble(arr[2]));
 		student.setWeight(Double.parseDouble(arr[3]));
-		student.setFacultyNumber(Integer.parseInt(arr[4]));
+		student.setFacultyNumber(arr[4]);
 		String[] scores = arr[5].split("\s");
-		List<Double> sc = new ArrayList<Double>();
+		List<Integer> sc = new ArrayList<Integer>();
 		for (String string : scores) {
-			sc.add(Double.parseDouble(string));
+			sc.add(Integer.parseInt(string));
 		}
-		student.setScores(sc.stream().mapToDouble(Double::doubleValue).toArray());
+		student.setScores(sc.stream().mapToInt(Integer::intValue).toArray());
 		student.setImageHeight(Double.parseDouble(arr[6]));
 		student.setImageWidth(Double.parseDouble(arr[7]));
 		System.out.println("after:" + student);

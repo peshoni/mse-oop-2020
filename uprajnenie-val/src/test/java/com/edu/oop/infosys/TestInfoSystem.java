@@ -18,7 +18,7 @@ public class TestInfoSystem {
 	@Test
 	public void testStudentAverageScoreCalculator() {
 		Student student = new Student();
-		double[] scores = new double[] { 2, 3, 4, 5, 6 };
+		int[] scores = new int[] { 2, 3, 4, 5, 6 };
 		student.setScores(scores);
 		assertEquals(4, student.calculateAverageScore(), 0);
 	}
@@ -26,7 +26,7 @@ public class TestInfoSystem {
 	@Test
 	public void testStudentAverageScoreCalculatorWithRounding() {
 		Student student = new Student();
-		double[] scores = new double[] { 3, 3, 4, 0, 0 };
+		int[] scores = new int[] { 3, 3, 4, 0, 0 };
 		student.setScores(scores);
 		assertEquals(3.33, student.calculateAverageScore(), 0);
 	}
@@ -34,7 +34,7 @@ public class TestInfoSystem {
 	@Test
 	public void testStudentAverageScoreWithFewerScores() {
 		Student student = new Student();
-		double[] scores = new double[] { 2, 3, 0, 0, 0 };
+		int[] scores = new int[] { 2, 3, 0, 0, 0 };
 		student.setScores(scores);
 		assertEquals(2.5, student.calculateAverageScore(), 0);
 	}
@@ -42,14 +42,14 @@ public class TestInfoSystem {
 	@Test(expected = RuntimeException.class)
 	public void testStudentAverageScoreWithMoreRatings() {
 		Student student = new Student();
-		double[] scores = new double[] { 2, 3, 0, 0, 0, 0 };
+		int[] scores = new int[] { 2, 3, 0, 0, 0, 0 };
 		student.setScores(scores);
 	}
 
 	@Test
 	public void testStudentAverageCalculatorWithEmptyArray() {
 		Student student = new Student();
-		double[] scores = new double[] {};
+		int[] scores = new int[] {};
 		student.setScores(scores);
 		assertEquals(0, student.calculateAverageScore(), 0);
 	}
@@ -63,9 +63,9 @@ public class TestInfoSystem {
 	@Test
 	public void testStudentManagerCalculateAverage() {
 		StudentManager manager = new StudentManager();
-		manager.addStudent(new Student().setScores(new double[] { 3, 3, 4, 0, 0 }));
-		manager.addStudent(new Student().setScores(new double[] { 2, 3, 4, 2, 0 }));
-		manager.addStudent(new Student().setScores(new double[] { 5, 3, 4, 5, 6 }));
+		manager.addStudent(new Student().setScores(new int[] { 3, 3, 4, 0, 0 }));
+		manager.addStudent(new Student().setScores(new int[] { 2, 3, 4, 2, 0 }));
+		manager.addStudent(new Student().setScores(new int[] { 5, 3, 4, 5, 6 }));
 		manager.calculateAverageScores();
 		assertTrue(manager.getStudents().get(2).getAverageScore() > 0);
 	}
