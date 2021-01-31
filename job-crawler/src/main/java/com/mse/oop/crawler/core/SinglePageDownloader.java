@@ -10,8 +10,8 @@ package com.mse.oop.crawler.core;
 public class SinglePageDownloader implements Downloader {
 	private RandomTimeWorker worker;
 
-	public SinglePageDownloader(int maxCalls, Timeouts timeoutRange, int limitJobPerRequest) {
-		worker = new RandomTimeWorker(maxCalls, timeoutRange, limitJobPerRequest);
+	public SinglePageDownloader(Timeouts timeout, int pageLimit, int itemsLimit) {
+		worker = new RandomTimeWorker(10, timeout, 20);
 	}
 
 	@Override

@@ -3,7 +3,7 @@ package com.mse.oop.crawler.gui;
 import java.util.ArrayList;
 
 import com.mse.oop.crawler.models.JobSite;
-import com.mse.oop.crawler.utils.CUtil;
+import com.mse.oop.crawler.utils.CrawlerUtil;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,7 +15,7 @@ public class CrawlerApp extends Application {
 	protected static ArrayList<JobSite> jobSites = new ArrayList<JobSite>();
 
 	public static void main(String[] args) {
-		jobSites = CUtil.getJobSitesCollection();
+		jobSites = CrawlerUtil.getJobSitesCollection();
 		launch(args);
 	}
 

@@ -18,17 +18,22 @@ import java.util.Random;
  */
 public enum Timeouts {
 	/**
-	 * Type 1 with random value in range : 500ms - 1000ms
+	 * This is only for test purposes! Method for get random number will always
+	 * returns ZERO.
 	 */
-	SMALL(1, 500, 5000),
+	TEST(0, 0, 0),
 	/**
-	 * Type 3 with random value in range : 1000 - 10000
+	 * Type 1 with random value in range : 500ms - 3000ms
 	 */
-	MIDDLE(2, 1000, 10000),
+	SMALL(1, 500, 3000),
 	/**
-	 * Type 3 with random value in range : 5000 - 20000
+	 * Type 2 with random value in range : 2000 - 5000
 	 */
-	LARGE(3, 5000, 20000);
+	MIDDLE(2, 2000, 5000),
+	/**
+	 * Type 3 with random value in range : 3000 - 8000
+	 */
+	LARGE(3, 3000, 8000);
 
 	private int typeId;
 	private int min;
@@ -52,6 +57,9 @@ public enum Timeouts {
 	}
 
 	private int getRandomNumberUsingNextInt(int min, int max) {
+		if ((min + max) == 0) {
+			return 0;
+		}
 		Random random = new Random();
 		return random.nextInt(max - min) + min;
 	}

@@ -9,6 +9,7 @@ package com.mse.oop.crawler.models;
  *
  */
 public class JobPossition {
+	private int id;
 	private String label;
 	private String link;
 	private String possition;
@@ -71,5 +72,13 @@ public class JobPossition {
 
 	public void setSalary(String salary) {
 		this.salary = salary;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }

@@ -13,8 +13,11 @@ public class JobSite {
 	private long id;
 	private String name;
 	private String siteType;
+
 	private String url;
 	private Hyperlink hyperLink;
+
+	private String selectorPaginator;
 
 	private String selectorPossition;
 	private String selectorJobDescription;
@@ -119,5 +122,13 @@ public class JobSite {
 
 	public void setHyperLink(Hyperlink hyperLink) {
 		this.hyperLink = hyperLink;
+	}
+
+	public String getSelectorPaginator() {
+		return selectorPaginator;
+	}
+
+	public void setSelectorPaginator(String selectorPaginator) {
+		this.selectorPaginator = selectorPaginator;
 	}
 }

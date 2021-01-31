@@ -10,9 +10,9 @@ package com.mse.oop.crawler.core;
  *
  */
 public class DownloaderFactory {
-	public Downloader getDownloader(Timeouts timeout, boolean isForMultiPage, int maxCalls,int limitJobPerRequest) {
-		return isForMultiPage ? new SinglePageDownloader(maxCalls, timeout,limitJobPerRequest)
-				: new MultiPageDownloader(maxCalls, timeout,limitJobPerRequest);
-
-	}
+//	public Downloader getDownloader(Timeouts timeout, boolean isForMultiPage, int itemsLimit, int pageLimit) {
+//		return isForMultiPage ? new SinglePageDownloader(timeout, 10, 10)
+//				: new MultiPageDownloader(timeout, pageLimit, itemsLimit);
+//
+//	}
 }

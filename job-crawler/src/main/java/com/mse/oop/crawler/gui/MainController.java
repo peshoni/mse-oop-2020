@@ -8,7 +8,7 @@ import java.util.Hashtable;
 import java.util.ResourceBundle;
 
 import com.mse.oop.crawler.models.JobSite;
-import com.mse.oop.crawler.utils.CUtil;
+import com.mse.oop.crawler.utils.CrawlerUtil;
 
 import javafx.application.HostServices;
 import javafx.collections.FXCollections;
@@ -211,7 +211,7 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 
 		} catch (IOException e) {
 			e.printStackTrace();
-			CUtil.showError(e.getMessage());
+			CrawlerUtil.showError(e.getMessage());
 		}
 
 	}

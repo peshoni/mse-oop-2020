@@ -46,6 +46,7 @@ public class RandomTimeWorker implements Runnable {
 				for (int i = 0; i < queueSize; i++) {
 					System.out.println(queue.poll());
 				}
+
 			}
 
 			// gogo
@@ -69,11 +70,10 @@ public class RandomTimeWorker implements Runnable {
 		}
 	}
 
-
-
 	public int getCallsCounter() {
 		return callsCounter;
 	}
+
 	private JobPossition buildJobPostionObjetc() {
 		JobPossition possiton = new JobPossition();
 		possiton.setLabel("job label");
