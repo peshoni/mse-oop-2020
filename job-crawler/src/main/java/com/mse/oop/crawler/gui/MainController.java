@@ -5,8 +5,11 @@ import java.net.URL;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import com.mse.oop.crawler.core.MultiPageDownloader;
+import com.mse.oop.crawler.core.Timeouts;
 import com.mse.oop.crawler.models.JobSite;
 import com.mse.oop.crawler.utils.CrawlerUtil;
 
@@ -109,7 +112,18 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 		case "Button":
 			switch (controls.get(event.getSource())) {
 			case "btnDownload":
-				resultTextArea.appendText(Timestamp.valueOf(LocalDateTime.now()) + ": download" + LS);
+
+				System.out.println("RUN..");
+				List<JobSite> sites = CrawlerUtil.getJobSitesCollection();
+				JobSite jobsBg = sites.get(0);
+
+				MultiPageDownloader downloader = new MultiPageDownloader(jobsBg, Timeouts.MIDDLE, 1);
+				downloader.setParent(this);
+
+				downloader.downloadJobsPosistions();
+				// resultTextArea.appendText(Timestamp.valueOf(LocalDateTime.now()) + ":
+				// download" + LS);
+
 				// CUtil.showError("Hillou");
 				break;
 			case "btnStop":
@@ -214,6 +228,11 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 			CrawlerUtil.showError(e.getMessage());
 		}
 
+	}
+
+	public synchronized void showNewArrived(String text) {
+		System.out.println(text);
+		this.resultTextArea.appendText(text + LS);
 	}
 
 }

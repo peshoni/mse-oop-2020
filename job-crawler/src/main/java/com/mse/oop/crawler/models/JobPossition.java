@@ -3,15 +3,19 @@
  */
 package com.mse.oop.crawler.models;
 
+import java.sql.Timestamp;
+
 /**
  * 
  * @author Petar Ivanov - pesho02@abv.bg
  *
  */
 public class JobPossition {
-	private int id;
+
+	private Timestamp downloadedAt;
 	private String label;
 	private String link;
+
 	private String possition;
 	private String description;
 	private String refNumber;
@@ -74,11 +78,19 @@ public class JobPossition {
 		this.salary = salary;
 	}
 
-	public int getId() {
-		return id;
+	public Timestamp getDownloadedAt() {
+		return downloadedAt;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setDownloadedAt(Timestamp downloadedAt) {
+		this.downloadedAt = downloadedAt;
 	}
+
+	@Override
+	public String toString() {
+		return "JobPossition [downloadedAt=" + downloadedAt + ", label=" + label + ", link=" + link + ", possition="
+				+ possition + ", description=" + description + ", refNumber=" + refNumber + ", location=" + location
+				+ ", salary=" + salary + "]";
+	}
+
 }

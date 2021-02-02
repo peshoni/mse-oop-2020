@@ -23,7 +23,7 @@ public class CrawlerApp extends Application {
 	public void start(Stage primaryStage) throws Exception {
 
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("Main.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("Crawler.fxml"));
 			Parent root = loader.load();// FXMLLoader.load(getClass().getResource("Crawler.fxml"));
 			primaryStage.setTitle("Job crawler");
 

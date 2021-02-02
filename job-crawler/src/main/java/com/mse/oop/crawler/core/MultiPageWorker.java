@@ -3,21 +3,25 @@
  */
 package com.mse.oop.crawler.core;
 
+import java.io.IOException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import com.mse.oop.crawler.gui.MainController;
 import com.mse.oop.crawler.models.JobPossition;
 import com.mse.oop.crawler.models.JobSite;
+import com.mse.oop.crawler.utils.CrawlerUtil;
 
 /**
+ * USed state design pattern - works according {@link Timeouts} state
+ * 
  * @author Petar Ivanov - pesho02@abv.bg
  *
  */
@@ -34,8 +38,8 @@ public class MultiPageWorker implements Runnable {
 	private int itemsPerPage;
 	private int itemsPerTransaction;
 	private int pageLimit;
-	// DELETE THIS
-	AtomicInteger idGen = new AtomicInteger(1);
+
+	private MainController parent;
 
 	public MultiPageWorker(JobSite site, int allItems, int itemsPerPage, int itemsPerTransaction, int pageLimit,
 			Timeouts timeout) {
@@ -55,39 +59,58 @@ public class MultiPageWorker implements Runnable {
 	}
 
 	private void processSite() {
+		String url = site.getUrl();
+		System.out.println(url);
 
 		for (int i = 0; i < allItems; i += itemsPerPage) {
-
 			// read page - build URL
 			Document document = null;
 			try {
-				document = Jsoup.connect("https://www.jobs.bg/front_job_search.php?frompage=" + i).get();
+				document = Jsoup.connect(url + i).get();
+				System.out.println("Doc is here");
 			} catch (Exception e) {
+				e.printStackTrace();
+
 				isAlive = false;
+				break;
 			}
 
 			System.out.println("From item : " + i + " to: " + (i + itemsPerPage));
+			Elements jobLink = document.select(".joblink");
+			System.out.println("Size: " + jobLink.size());
 			// Read items from page and put in queue - for example 15
 			for (int j = 0; j < itemsPerPage; j++) {
+
+//				if (j == 3) {
+//					throw new RuntimeException("Stop here");
+//				}
+
 				if (fetchedItemsCounter >= allItems) {
 					this.emptyingTheQueue(true);
 					break;
 				}
 
-				Elements select = document.select(".joblink");
-				String attr = select.get(j).attr("href");
-				String jobUrl = "https://www.jobs.bg/" + attr;
-				System.out.println(jobUrl);
+				String attr = jobLink.get(j).attr("href");
+				String link = "https://www.jobs.bg/" + attr;
 
-				// READ AND BUILD HERE
-				queue.add(read());
-
-				fetchedItemsCounter++;
-
-				int randomNumberInMilliseconds = this.timeout.getRandomNumberInInterval();
-				System.out.println(Thread.currentThread().getName() + " Interval: " + randomNumberInMilliseconds);
+				JobPossition possition;
 				try {
+					// Document d = new Document("Doc");
+					Document jobDoc = Jsoup.connect(link).get();
+					possition = buildJobPossitionFromElement(jobDoc);
+					possition.setLink(link);
+					this.parent.showNewArrived(possition.toString());
+					queue.add(possition);
+					fetchedItemsCounter++;
 
+				} catch (IOException e1) {
+
+					e1.printStackTrace();
+				}
+
+				try {
+					int randomNumberInMilliseconds = this.timeout.getRandomNumberInInterval();
+					System.out.println(Thread.currentThread().getName() + " Interval: " + randomNumberInMilliseconds);
 					Thread.sleep(randomNumberInMilliseconds);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -114,6 +137,23 @@ public class MultiPageWorker implements Runnable {
 		System.out.println("In queue: " + queue.size());
 	}
 
+	private JobPossition buildJobPossitionFromElement(Document jobDoc) {
+		JobPossition jobPossition = new JobPossition();
+		jobPossition.setDownloadedAt(Timestamp.valueOf(LocalDateTime.now()));
+		Elements select = jobDoc.select(site.getSelectorPossition());
+		jobPossition.setPossition(CrawlerUtil.tryToGetString(select.text()));
+		select = jobDoc.select(site.getSelectorLocaion());
+		jobPossition.setLocation(CrawlerUtil.tryToGetString(select.text()));
+		select = jobDoc.select(site.getSelectorRefNumber());
+		jobPossition.setRefNumber(CrawlerUtil.tryToGetString(select.text()));
+		select = jobDoc.select(site.getSelectorSalary());
+		jobPossition.setSalary(CrawlerUtil.tryToGetString(select.text()));
+		select = jobDoc.select(site.getSelectorJobDescription());
+		jobPossition.setDescription(CrawlerUtil.tryToGetString(select.text()));
+
+		return jobPossition;
+	}
+
 	/**
 	 * A method for emptying the queue.
 	 * 
@@ -137,23 +177,16 @@ public class MultiPageWorker implements Runnable {
 		}
 	}
 
-	public JobPossition read() {
-		JobPossition pos = new JobPossition();
-		pos.setId(idGen.getAndIncrement());
-		pos.setLabel(new Timestamp(new Date().getTime()).toString());
-		return pos;
-	}
-
-	public void printPossitions() {
-		this.allPossition.forEach(pos -> System.out.println(pos.getId()));
-	}
-
 	public int getFetchedItemsCounter() {
 		return fetchedItemsCounter;
 	}
 
 	public int getPageReadedCounter() {
 		return pageReadedCounter;
+	}
+
+	public void setParent(MainController parent) {
+		this.parent = parent;
 	}
 
 }

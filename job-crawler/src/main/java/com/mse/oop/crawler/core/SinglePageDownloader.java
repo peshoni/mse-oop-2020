@@ -8,16 +8,16 @@ package com.mse.oop.crawler.core;
  *
  */
 public class SinglePageDownloader implements Downloader {
-	private RandomTimeWorker worker;
+	// private RandomTimeWorker worker;
 
 	public SinglePageDownloader(Timeouts timeout, int pageLimit, int itemsLimit) {
-		worker = new RandomTimeWorker(10, timeout, 20);
+		// worker = new RandomTimeWorker(10, timeout, 20);
 	}
 
 	@Override
 	public void downloadJobsPosistions() {
 		System.out.println("Single page downloader");
-		this.worker.run();
+		// this.worker.run();
 	}
 
 }

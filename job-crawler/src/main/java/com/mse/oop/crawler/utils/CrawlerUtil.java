@@ -39,7 +39,6 @@ public class CrawlerUtil {
 
 		site.setSelectorPaginator(
 				"#search_results_div > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td");
-
 		site.setSelectorJobDescription(
 				"body > table:nth-child(4) > tbody > tr > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td");
 		site.setSelectorLocaion(
@@ -50,13 +49,9 @@ public class CrawlerUtil {
 				"body > table:nth-child(4) > tbody > tr > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(1) > td");
 		site.setSelectorSalary(
 				"body > table:nth-child(4) > tbody > tr > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td > span");
-		try {
 
-			site.setUrl("https://www.jobs.bg/front_job_search.php?frompage=0");
-		} catch (Exception e) {
+		site.setUrl("https://www.jobs.bg/front_job_search.php?frompage=");
 
-			System.out.println(e.getMessage());
-		}
 		// site.setUrl(new
 		// Hyperlink("https://www.jobs.bg/front_job_search.php?frompage=0"));
 		jobSites.add(site);
@@ -143,5 +138,20 @@ public class CrawlerUtil {
 		}
 		return result;
 	}
+
+	public static String tryToGetString(String text) {
+		return text == null ? "" : text;
+	}
+
+//	private JobPossition buildJobPostionObjetc() {
+//	JobPossition possiton = new JobPossition();
+//	possiton.setLabel("job label");
+//	possiton.setRefNumber("Ref number");
+//	possiton.setLocation("location");
+//	possiton.setDescription("description");
+//	possiton.setLink("link");
+//	possiton.setSalary("salary");
+//	return possiton;
+//}
 
 }
