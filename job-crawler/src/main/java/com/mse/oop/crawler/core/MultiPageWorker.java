@@ -15,7 +15,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import com.mse.oop.crawler.gui.MainController;
-import com.mse.oop.crawler.models.JobPossition;
+import com.mse.oop.crawler.models.JobPosition;
 import com.mse.oop.crawler.models.JobSite;
 import com.mse.oop.crawler.utils.CrawlerUtil;
 
@@ -29,8 +29,8 @@ public class MultiPageWorker implements Runnable {
 	private JobSite site;
 	private Timeouts timeout;
 	private boolean isAlive;
-	private Queue<JobPossition> queue = new LinkedList<JobPossition>();
-	private ArrayList<JobPossition> allPossition = new ArrayList<JobPossition>(1000);
+	private Queue<JobPosition> queue = new LinkedList<JobPosition>();
+	private ArrayList<JobPosition> allPosition = new ArrayList<JobPosition>(1000);
 	private int fetchedItemsCounter = 0;
 	private int pageReadedCounter = 0;
 
@@ -63,20 +63,18 @@ public class MultiPageWorker implements Runnable {
 		System.out.println(url);
 
 		for (int i = 0; i < allItems; i += itemsPerPage) {
-			// read page - build URL
+
 			Document document = null;
 			try {
 				document = Jsoup.connect(url + i).get();
-				System.out.println("Doc is here");
 			} catch (Exception e) {
 				e.printStackTrace();
-
 				isAlive = false;
 				break;
 			}
 
-			System.out.println("From item : " + i + " to: " + (i + itemsPerPage));
-			Elements jobLink = document.select(".joblink");
+			// System.out.println("From item : " + i + " to: " + (i + itemsPerPage));
+			Elements jobLink = document.select(site.getRowSelector());
 			System.out.println("Size: " + jobLink.size());
 			// Read items from page and put in queue - for example 15
 			for (int j = 0; j < itemsPerPage; j++) {
@@ -91,16 +89,18 @@ public class MultiPageWorker implements Runnable {
 				}
 
 				String attr = jobLink.get(j).attr("href");
-				String link = "https://www.jobs.bg/" + attr;
+				String link = site.getAddress() + "/" + attr;
 
-				JobPossition possition;
+				JobPosition position;
 				try {
-					// Document d = new Document("Doc");
+
 					Document jobDoc = Jsoup.connect(link).get();
-					possition = buildJobPossitionFromElement(jobDoc);
-					possition.setLink(link);
-					this.parent.showNewArrived(possition.toString());
-					queue.add(possition);
+					position = buildJobPositionFromElement(jobDoc);
+					position.setLink(link);
+
+					this.parent.showNewArrived(position);// .toString());
+
+					queue.add(position);
 					fetchedItemsCounter++;
 
 				} catch (IOException e1) {
@@ -133,25 +133,25 @@ public class MultiPageWorker implements Runnable {
 
 		}
 		isAlive = false;
-		System.out.println("Done. Pages: " + pageReadedCounter + ", readed items: " + allPossition.size());
+		System.out.println("Done. Pages: " + pageReadedCounter + ", readed items: " + allPosition.size());
 		System.out.println("In queue: " + queue.size());
 	}
 
-	private JobPossition buildJobPossitionFromElement(Document jobDoc) {
-		JobPossition jobPossition = new JobPossition();
-		jobPossition.setDownloadedAt(Timestamp.valueOf(LocalDateTime.now()));
-		Elements select = jobDoc.select(site.getSelectorPossition());
-		jobPossition.setPossition(CrawlerUtil.tryToGetString(select.text()));
+	private JobPosition buildJobPositionFromElement(Document jobDoc) {
+		JobPosition jobPosition = new JobPosition();
+		jobPosition.setDownloadedAt(Timestamp.valueOf(LocalDateTime.now()));
+		Elements select = jobDoc.select(site.getSelectorPosition());
+		jobPosition.setPosition(CrawlerUtil.tryToGetString(select.text()));
 		select = jobDoc.select(site.getSelectorLocaion());
-		jobPossition.setLocation(CrawlerUtil.tryToGetString(select.text()));
+		jobPosition.setLocation(CrawlerUtil.tryToGetString(select.text()));
 		select = jobDoc.select(site.getSelectorRefNumber());
-		jobPossition.setRefNumber(CrawlerUtil.tryToGetString(select.text()));
+		jobPosition.setRefNumber(CrawlerUtil.tryToGetString(select.text()));
 		select = jobDoc.select(site.getSelectorSalary());
-		jobPossition.setSalary(CrawlerUtil.tryToGetString(select.text()));
+		jobPosition.setSalary(CrawlerUtil.tryToGetString(select.text()));
 		select = jobDoc.select(site.getSelectorJobDescription());
-		jobPossition.setDescription(CrawlerUtil.tryToGetString(select.text()));
+		jobPosition.setDescription(CrawlerUtil.tryToGetString(select.text()));
 
-		return jobPossition;
+		return jobPosition;
 	}
 
 	/**
@@ -162,16 +162,16 @@ public class MultiPageWorker implements Runnable {
 	private void emptyingTheQueue(boolean all) {
 		if (all) {
 			while (queue.size() > 0) {
-				JobPossition pos = queue.poll();
+				JobPosition pos = queue.poll();
 				if (pos != null) {
-					allPossition.add(pos);
+					allPosition.add(pos);
 				}
 			}
 		} else {
 			for (int j = 0; j < itemsPerTransaction; j++) {
-				JobPossition pos = queue.poll();
+				JobPosition pos = queue.poll();
 				if (pos != null) {
-					allPossition.add(pos);
+					allPosition.add(pos);
 				}
 			}
 		}

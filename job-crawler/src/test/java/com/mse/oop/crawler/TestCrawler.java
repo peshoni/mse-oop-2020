@@ -11,7 +11,7 @@ import com.mse.oop.crawler.utils.CrawlerUtil;
 
 public class TestCrawler {
 
-	@Test
+	// @Test
 	public void testMultiPagePaginator() {
 
 		MultiPageWorker paginator = new MultiPageWorker(CrawlerUtil.getJobSitesCollection().get(0), 6565, 15, 10, 3,
@@ -24,7 +24,7 @@ public class TestCrawler {
 		assertEquals(3, paginator.getPageReadedCounter());
 	}
 
-	@Test
+	// @Test
 	public void testMultiPagePaginatorWithMoreThanAvailablePage() {
 		int allItems = 6565;
 		MultiPageWorker paginator = new MultiPageWorker(CrawlerUtil.getJobSitesCollection().get(0), allItems, 15, 10,

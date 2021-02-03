@@ -2,15 +2,18 @@ package com.mse.oop.crawler.gui;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import com.mse.oop.crawler.core.Downloader;
 import com.mse.oop.crawler.core.MultiPageDownloader;
 import com.mse.oop.crawler.core.Timeouts;
+import com.mse.oop.crawler.models.JobPosition;
 import com.mse.oop.crawler.models.JobSite;
+import com.mse.oop.crawler.models.TableElement;
 import com.mse.oop.crawler.utils.CrawlerUtil;
 
 import javafx.application.HostServices;
@@ -28,7 +31,6 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -39,14 +41,21 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 	private HostServices hostServices;
 	private final String LS = System.lineSeparator();
 	private Hashtable<Object, String> controls;
+	private List<Downloader> downloaderPool;
 	@FXML
 	private Button btnDownload;
 	@FXML
 	private Button btnStop;
+//	@FXML
+//	private TextArea resultTextArea;
 	@FXML
-	private TextArea resultTextArea;
+	private TableView<TableElement> sitesTable;
+
 	@FXML
-	private TableView<JobSite> sitesTable;
+	private TableView<TableElement> resultTable;
+
+	private ObservableList<TableElement> jobPossitions = FXCollections.observableArrayList();
+	private AtomicInteger counter = new AtomicInteger(1);
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -57,10 +66,10 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 		btnDownload.setOnAction(this);
 		btnStop.setOnAction(this);
 
-		ObservableList<JobSite> sites = FXCollections.observableArrayList();
+		ObservableList<TableElement> sites = FXCollections.observableArrayList();
 		CrawlerApp.jobSites.forEach(site -> {
 			try {
-				Hyperlink link = new Hyperlink(site.getUrl());
+				Hyperlink link = new Hyperlink(site.getAddress());
 				site.setHyperLink(link);
 				link.setOnAction(this);
 				sites.add(site);
@@ -68,41 +77,68 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 			}
 		});
 
-		addColumns();
+		addColumnsToSitesTable();
 		sitesTable.setItems(sites);
+
+		addColumnsToResultTable();
+		resultTable.setItems(jobPossitions);
+
+		this.initThreadPool();
 	}
 
-	private void addColumns() {
+	private void initThreadPool() {
+		downloaderPool = new ArrayList<Downloader>();
 
-		TableColumn<JobSite, Integer> idColumn = new TableColumn<>("id");
-		idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-		sitesTable.getColumns().add(idColumn);
+		List<JobSite> sites = CrawlerUtil.getJobSitesCollection();
+		JobSite jobsBg = sites.get(0);
+		MultiPageDownloader downloader = new MultiPageDownloader(jobsBg, Timeouts.MIDDLE, 1);
+		downloader.setParent(this);
 
-		TableColumn<JobSite, String> nameColumn = new TableColumn<>("name");
-		nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-		sitesTable.getColumns().add(nameColumn);
+		downloaderPool.add(downloader);
 
-		TableColumn<JobSite, Hyperlink> urlColumn = new TableColumn<>("address");
-		urlColumn.setCellValueFactory(new PropertyValueFactory<>("hyperLink"));
-		urlColumn.setCellFactory(new HyperlinkCell());
-		sitesTable.getColumns().add(urlColumn);
+	}
 
-		TableColumn<JobSite, String> siteType = new TableColumn<>("type");
-		siteType.setCellValueFactory(new PropertyValueFactory<>("siteType"));
-		sitesTable.getColumns().add(siteType);
+	private void addColumnsToSitesTable() {
+		addStringColumn(sitesTable, "#", "id");
+		addStringColumn(sitesTable, "name", "name");
+		addLinkColumn(sitesTable, "address", "hyperLink");
+		addStringColumn(sitesTable, "type", "siteType");
+		addStringColumn(sitesTable, "limit per download", "maxItemsPerDownload");
+		addActionColumn(sitesTable, "edit", "edit");
+	}
 
-		TableColumn<JobSite, String> maxItemsPerDownload = new TableColumn<>("limit per download");
-		maxItemsPerDownload.setCellValueFactory(new PropertyValueFactory<>("maxItemsPerDownload"));
-		sitesTable.getColumns().add(maxItemsPerDownload);
+	private void addColumnsToResultTable() {
+		addStringColumn(resultTable, "#", "id");
+//		private String label;
+//		private String link; 
+//		private String description; 
+		addStringColumn(resultTable, "downloaded", "downloadedAt");
+		addStringColumn(resultTable, "position", "position");
+		addStringColumn(resultTable, "salary", "salary");
+		addStringColumn(resultTable, "refNumber", "refNumber");
+		addStringColumn(resultTable, "location", "location");
+		addLinkColumn(resultTable, "link", "hyperLink");
 
-		TableColumn<JobSite, Void> editColumn = new TableColumn<JobSite, Void>("edit");
-		editColumn.setCellFactory(new ButtonCell("edit"));
-		sitesTable.getColumns().add(editColumn);
+	}
 
-		TableColumn<JobSite, Void> runColumn = new TableColumn<JobSite, Void>("run");
-		runColumn.setCellFactory(new ButtonCell("run"));
-		sitesTable.getColumns().add(runColumn);
+	private void addStringColumn(TableView<TableElement> table, String label, String property) {
+		TableColumn<TableElement, String> column = new TableColumn<>(label);
+		column.setCellValueFactory(new PropertyValueFactory<>(property));
 
+		table.getColumns().add(column);
+	}
+
+	private void addLinkColumn(TableView<TableElement> table, String label, String property) {
+		TableColumn<TableElement, Hyperlink> column = new TableColumn<>(label);
+		column.setCellValueFactory(new PropertyValueFactory<>(property));
+		column.setCellFactory(new HyperlinkCell());
+		table.getColumns().add(column);
+	}
+
+	private void addActionColumn(TableView<TableElement> table, String label, String buttonLabel) {
+		TableColumn<TableElement, Void> column = new TableColumn<TableElement, Void>(label);
+		column.setCellFactory(new ButtonCell(buttonLabel));
+		table.getColumns().add(column);
 	}
 
 	@Override
@@ -112,22 +148,9 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 		case "Button":
 			switch (controls.get(event.getSource())) {
 			case "btnDownload":
-
-				System.out.println("RUN..");
-				List<JobSite> sites = CrawlerUtil.getJobSitesCollection();
-				JobSite jobsBg = sites.get(0);
-
-				MultiPageDownloader downloader = new MultiPageDownloader(jobsBg, Timeouts.MIDDLE, 1);
-				downloader.setParent(this);
-
-				downloader.downloadJobsPosistions();
-				// resultTextArea.appendText(Timestamp.valueOf(LocalDateTime.now()) + ":
-				// download" + LS);
-
-				// CUtil.showError("Hillou");
+				downloaderPool.forEach(e -> e.downloadJobsPosistions());
 				break;
 			case "btnStop":
-				resultTextArea.appendText(Timestamp.valueOf(LocalDateTime.now()) + ": Stop" + LS);
 				break;
 			default:
 				break;
@@ -148,10 +171,10 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 		this.hostServices = hostServices;
 	}
 
-	class HyperlinkCell implements Callback<TableColumn<JobSite, Hyperlink>, TableCell<JobSite, Hyperlink>> {
+	class HyperlinkCell implements Callback<TableColumn<TableElement, Hyperlink>, TableCell<TableElement, Hyperlink>> {
 		@Override
-		public TableCell<JobSite, Hyperlink> call(TableColumn<JobSite, Hyperlink> arg) {
-			TableCell<JobSite, Hyperlink> cell = new TableCell<JobSite, Hyperlink>() {
+		public TableCell<TableElement, Hyperlink> call(TableColumn<TableElement, Hyperlink> arg) {
+			TableCell<TableElement, Hyperlink> cell = new TableCell<TableElement, Hyperlink>() {
 				@Override
 				protected void updateItem(Hyperlink item, boolean empty) {
 					setGraphic(item);
@@ -161,7 +184,7 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 		}
 	}
 
-	class ButtonCell implements Callback<TableColumn<JobSite, Void>, TableCell<JobSite, Void>> {
+	class ButtonCell implements Callback<TableColumn<TableElement, Void>, TableCell<TableElement, Void>> {
 		private String supportColumn = "";
 
 		public ButtonCell(String supportColumnType) {
@@ -170,14 +193,14 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 		}
 
 		@Override
-		public TableCell<JobSite, Void> call(TableColumn<JobSite, Void> param) {
-			final TableCell<JobSite, Void> cell = new TableCell<JobSite, Void>() {
+		public TableCell<TableElement, Void> call(TableColumn<TableElement, Void> param) {
+			final TableCell<TableElement, Void> cell = new TableCell<TableElement, Void>() {
 				private final Button btn = new Button(supportColumn);
 				{
 					btn.setOnAction((ActionEvent event) -> {
 
 						if ("edit".equals(supportColumn)) {
-							JobSite selected = getTableView().getItems().get(getIndex());
+							TableElement selected = getTableView().getItems().get(getIndex());
 							openEditSiteDialog(selected);
 						} else if ("run".equals(supportColumn)) {
 							System.out.println("RUN");
@@ -200,7 +223,7 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 		}
 	}
 
-	private void openEditSiteDialog(JobSite jobSite) {
+	private void openEditSiteDialog(TableElement jobSite) {
 		System.out.println("selectedData: " + jobSite);
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("Dialog.fxml"));
@@ -216,7 +239,7 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				public void handle(WindowEvent we) {
 					System.out.println("Stage is closing");
-					System.out.println("Job site new URL: " + jobSite.getUrl());
+					System.out.println("Job site new URL: " + ((JobSite) jobSite).getUrl());
 
 					we.consume();
 					stage.close();
@@ -227,12 +250,19 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 			e.printStackTrace();
 			CrawlerUtil.showError(e.getMessage());
 		}
-
 	}
 
-	public synchronized void showNewArrived(String text) {
-		System.out.println(text);
-		this.resultTextArea.appendText(text + LS);
+	/**
+	 * Add rows with position info into result table
+	 * 
+	 * @param position
+	 */
+	public synchronized void showNewArrived(JobPosition position) {
+		System.out.println(position);
+		Hyperlink link = new Hyperlink(position.getLink());
+		position.setHyperLink(link);
+		link.setOnAction(this);
+		position.setId(counter.getAndIncrement());
+		jobPossitions.add(position);
 	}
-
 }

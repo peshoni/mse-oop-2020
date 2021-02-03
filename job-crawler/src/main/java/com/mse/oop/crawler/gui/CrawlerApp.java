@@ -24,9 +24,9 @@ public class CrawlerApp extends Application {
 
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("Crawler.fxml"));
-			Parent root = loader.load();// FXMLLoader.load(getClass().getResource("Crawler.fxml"));
-			primaryStage.setTitle("Job crawler");
-
+			Parent root = loader.load();
+			primaryStage.setTitle("crawler");
+			primaryStage.setMaximized(true);
 			MainController controller = loader.getController();
 			controller.setHostServices(getHostServices());
 			primaryStage.setScene(new Scene(root, 800, 600));

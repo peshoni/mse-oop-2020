@@ -31,6 +31,10 @@ public class CrawlerUtil {
 		site.setName("Jobs.bg");
 		site.setSiteType("multi-page");
 		site.setTimeoutType(Timeouts.SMALL.getTypeId());
+		site.setAddress("https://www.jobs.bg");
+		site.setJobMainPageUrl("");
+		site.setRowSelector(".joblink");
+
 		// TODO FIX FIELDS
 		// max items per transaction
 		// max page limitation
@@ -43,14 +47,14 @@ public class CrawlerUtil {
 				"body > table:nth-child(4) > tbody > tr > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td");
 		site.setSelectorLocaion(
 				"body > table:nth-child(4) > tbody > tr > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td");
-		site.setSelectorPossition(
+		site.setSelectorPosition(
 				"body > table:nth-child(4) > tbody > tr > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(2) > td > b");
 		site.setSelectorRefNumber(
 				"body > table:nth-child(4) > tbody > tr > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(1) > td");
 		site.setSelectorSalary(
 				"body > table:nth-child(4) > tbody > tr > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td > span");
 
-		site.setUrl("https://www.jobs.bg/front_job_search.php?frompage=");
+		site.setUrl("https://www.jobs.bg/front_job_search.php?frompage=0");
 
 		// site.setUrl(new
 		// Hyperlink("https://www.jobs.bg/front_job_search.php?frompage=0"));
@@ -73,21 +77,17 @@ public class CrawlerUtil {
 				"body > table:nth-child(4) > tbody > tr > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td");
 		zaplataBg.setSelectorLocaion(
 				"body > table:nth-child(4) > tbody > tr > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td");
-		zaplataBg.setSelectorPossition(
+		zaplataBg.setSelectorPosition(
 				"body > table:nth-child(4) > tbody > tr > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(2) > td > b");
 		zaplataBg.setSelectorRefNumber(
 				"body > table:nth-child(4) > tbody > tr > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(1) > td");
 		zaplataBg.setSelectorSalary(
 				"body > table:nth-child(4) > tbody > tr > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td > span");
-		try {
 
-			zaplataBg.setUrl(
-					"https://www.zaplata.bg/search/?q=&city=&city_distance=0&price=200%3B10000&cat%5B0%5D=1000&go=");
-		} catch (Exception e) {
+		zaplataBg.setUrl(
+				"https://www.zaplata.bg/search/?q=&city=&city_distance=0&price=200%3B10000&cat%5B0%5D=1000&go=");
 
-			System.out.println(e.getMessage());
-		}
-
+		jobSites.add(zaplataBg);
 		// BULJOBS
 
 //		site = new JobSite();
@@ -103,7 +103,7 @@ public class CrawlerUtil {
 		site.setMaxItemsPerDownload(10);
 		site.setSelectorJobDescription("description selector");
 		site.setSelectorLocaion("loaction selector");
-		site.setSelectorPossition("possition selector");
+		site.setSelectorPosition("position selector");
 		site.setSelectorRefNumber("ref selector");
 		site.setSelectorSalary("salary selector");
 		site.setUrl("www.google.com");
@@ -143,15 +143,6 @@ public class CrawlerUtil {
 		return text == null ? "" : text;
 	}
 
-//	private JobPossition buildJobPostionObjetc() {
-//	JobPossition possiton = new JobPossition();
-//	possiton.setLabel("job label");
-//	possiton.setRefNumber("Ref number");
-//	possiton.setLocation("location");
-//	possiton.setDescription("description");
-//	possiton.setLink("link");
-//	possiton.setSalary("salary");
-//	return possiton;
-//}
+ 
 
 }

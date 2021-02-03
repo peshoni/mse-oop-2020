@@ -30,17 +30,17 @@
             </MenuBar>
          </top>
          <bottom>
-            <GridPane minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+            <GridPane minHeight="-Infinity" prefHeight="550.0" BorderPane.alignment="CENTER">
               <columnConstraints>
-                <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" />
-                <ColumnConstraints hgrow="NEVER" maxWidth="295.0" minWidth="10.0" prefWidth="81.0" />
+                <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="1038.0" prefWidth="1077.0" />
+                <ColumnConstraints hgrow="NEVER" maxWidth="295.0" minWidth="10.0" prefWidth="108.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 
               </rowConstraints>
                <children>
-                  <GridPane prefHeight="165.0" prefWidth="97.0" GridPane.columnIndex="1" GridPane.vgrow="SOMETIMES">
+                  <GridPane maxWidth="-Infinity" minWidth="-Infinity" prefHeight="165.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.vgrow="NEVER">
                     <columnConstraints>
                         <ColumnConstraints />
                     </columnConstraints>
@@ -48,8 +48,8 @@
                       <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
                       <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints maxHeight="76.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="152.0" minHeight="8.0" prefHeight="41.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="205.0" minHeight="10.0" prefHeight="205.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="152.0" minHeight="8.0" prefHeight="41.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="205.0" minHeight="10.0" prefHeight="205.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <Button fx:id="btnDownload" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="100" text="download" GridPane.rowIndex="3" />
@@ -60,7 +60,20 @@
                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                      </GridPane.margin>
                   </GridPane>
-                  <TextArea fx:id="resultTextArea" editable="false" focusTraversable="false" prefHeight="200.0" promptText="result" wrapText="true" />
+                  
+                  
+                  
+                  <!--TextArea fx:id="resultTextArea" editable="false" focusTraversable="false" prefHeight="200.0" promptText="result" wrapText="true" /-->
+                    <TableView fx:id="resultTable" prefHeight="496.0" prefWidth="1065.0" BorderPane.alignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+              <columns>
+ 
+              </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+            </TableView>
+                  
+                  
                </children>
                <BorderPane.margin>
                   <Insets bottom="5.0" left="5.0" right="10.0" top="5.0" />
@@ -76,6 +89,9 @@
 <!--                <TableColumn prefWidth="94.0" text="itemsPerLoad" />-->
 <!--                <TableColumn prefWidth="55.0" text="spinnerColumn" />-->
               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
             </TableView>
          </center>
       </BorderPane>

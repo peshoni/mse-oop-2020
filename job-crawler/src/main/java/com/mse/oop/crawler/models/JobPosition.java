@@ -5,18 +5,29 @@ package com.mse.oop.crawler.models;
 
 import java.sql.Timestamp;
 
+import javafx.scene.control.Hyperlink;
+
 /**
  * 
  * @author Petar Ivanov - pesho02@abv.bg
  *
  */
-public class JobPossition {
-
+public class JobPosition implements TableElement {
+	private int id;
 	private Timestamp downloadedAt;
 	private String label;
-	private String link;
 
-	private String possition;
+	@Override
+	public String toString() {
+		return "JobPosition [id=" + id + ", downloadedAt=" + downloadedAt + ", label=" + label + ", link=" + link
+				+ ", position=" + position + ", description=" + description + ", refNumber=" + refNumber + ", location="
+				+ location + ", salary=" + salary + "]";
+	}
+
+	private String link;
+	private Hyperlink hyperLink;
+
+	private String position;
 	private String description;
 	private String refNumber;
 	private String location;
@@ -36,14 +47,6 @@ public class JobPossition {
 
 	public void setLink(String link) {
 		this.link = link;
-	}
-
-	public String getPossition() {
-		return possition;
-	}
-
-	public void setPossition(String possition) {
-		this.possition = possition;
 	}
 
 	public String getDescription() {
@@ -86,11 +89,28 @@ public class JobPossition {
 		this.downloadedAt = downloadedAt;
 	}
 
-	@Override
-	public String toString() {
-		return "JobPossition [downloadedAt=" + downloadedAt + ", label=" + label + ", link=" + link + ", possition="
-				+ possition + ", description=" + description + ", refNumber=" + refNumber + ", location=" + location
-				+ ", salary=" + salary + "]";
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getPosition() {
+		return position;
+	}
+
+	public void setPosition(String position) {
+		this.position = position;
+	}
+
+	public Hyperlink getHyperLink() {
+		return hyperLink;
+	}
+
+	public void setHyperLink(Hyperlink hyperLink) {
+		this.hyperLink = hyperLink;
 	}
 
 }

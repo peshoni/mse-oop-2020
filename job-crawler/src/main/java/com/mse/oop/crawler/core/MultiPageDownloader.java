@@ -14,7 +14,8 @@ import com.mse.oop.crawler.models.JobSite;
 import com.mse.oop.crawler.utils.CrawlerUtil;
 
 /**
- * @author Petar Ivanov - petarivanovgap@gmail.com/pesho02@abv.bg
+ * 
+ * @author Petar Ivanov - pesho02@abv.bg
  *
  */
 public class MultiPageDownloader implements Downloader {
@@ -26,6 +27,7 @@ public class MultiPageDownloader implements Downloader {
 	private MainController parent;
 
 	// https://www.theladders.com/jobs/accounting-finance-jobs?sort=ByRelevance&page=400
+
 	/**
 	 * Class that fetch items for multi-page site. Uses two type of limitation - per
 	 * page or per items.
@@ -42,30 +44,16 @@ public class MultiPageDownloader implements Downloader {
 		} catch (IOException e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
-
-		intiWorker();
-
+		worker = new MultiPageWorker(this.site, allItems, itemsPerPage, 10, 2, Timeouts.SMALL);
 	}
 
 	private void getPaginatorParameters() throws IOException {
-		Document document = Jsoup.connect("https://www.jobs.bg/front_job_search.php?frompage=0").get();
+		Document document = Jsoup.connect(site.getUrl()).get();
 		Elements select = document.select(this.site.getSelectorPaginator());
-
 		String jobParams = select.text();
 		int[] params = CrawlerUtil.getSitePaginatorParams(jobParams);
 		this.itemsPerPage = params[0];
 		this.allItems = params[1];
-
-	}
-
-	private void intiWorker() {
-		System.out.println("InitWorker");
-
-		// TODO REMOVE THIS--
-
-		System.out.println("Jobs Items: per page" + itemsPerPage + " all: " + allItems);
-		worker = new MultiPageWorker(this.site, allItems, itemsPerPage, 10, 2, Timeouts.SMALL);
-
 	}
 
 	@Override
