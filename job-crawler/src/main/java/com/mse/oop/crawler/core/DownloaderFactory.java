@@ -6,7 +6,7 @@ package com.mse.oop.crawler.core;
 /**
  * Using Factory design pattern
  * 
- * @author Petar Ivanov - petarivanovgap@gmail.com/pesho02@abv.bg
+ * @author Petar Ivanov - pesho02@abv.bg
  *
  */
 public class DownloaderFactory {

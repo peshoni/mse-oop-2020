@@ -67,12 +67,9 @@ public class CrawlerUtil {
 		zaplataBg.setName("Zaplata.bg");
 		zaplataBg.setSiteType("multi-page");
 		zaplataBg.setTimeoutType(Timeouts.SMALL.getTypeId());
-
 		zaplataBg.setMaxItemsPerDownload(10);
-
 		zaplataBg.setSelectorPaginator(
 				"body > div.page.lineHeightFix.pInside > ul.scheme23 > li.left > div.pageOptions > strong");
-
 		zaplataBg.setSelectorJobDescription(
 				"body > table:nth-child(4) > tbody > tr > td > table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td");
 		zaplataBg.setSelectorLocaion(
@@ -142,7 +139,5 @@ public class CrawlerUtil {
 	public static String tryToGetString(String text) {
 		return text == null ? "" : text;
 	}
-
- 
 
 }

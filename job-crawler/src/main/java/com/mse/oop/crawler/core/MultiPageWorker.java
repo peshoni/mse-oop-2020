@@ -93,12 +93,14 @@ public class MultiPageWorker implements Runnable {
 
 				JobPosition position;
 				try {
-
-					Document jobDoc = Jsoup.connect(link).get();
-					position = buildJobPositionFromElement(jobDoc);
-					position.setLink(link);
-
-					this.parent.showNewArrived(position);// .toString());
+					if (this.timeout.getTypeId() > 0) {
+						Document jobDoc = Jsoup.connect(link).get();
+						position = buildJobPositionFromElement(jobDoc);
+						position.setLink(link);
+						this.parent.showNewArrived(position);
+					} else {
+						position = new JobPosition();
+					}
 
 					queue.add(position);
 					fetchedItemsCounter++;
@@ -150,7 +152,6 @@ public class MultiPageWorker implements Runnable {
 		jobPosition.setSalary(CrawlerUtil.tryToGetString(select.text()));
 		select = jobDoc.select(site.getSelectorJobDescription());
 		jobPosition.setDescription(CrawlerUtil.tryToGetString(select.text()));
-
 		return jobPosition;
 	}
 

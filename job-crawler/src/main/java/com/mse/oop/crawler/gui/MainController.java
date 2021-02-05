@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Observable;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -38,24 +39,21 @@ import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 
 public class MainController implements Initializable, EventHandler<ActionEvent> {
-	private HostServices hostServices;
-	private final String LS = System.lineSeparator();
-	private Hashtable<Object, String> controls;
-	private List<Downloader> downloaderPool;
 	@FXML
 	private Button btnDownload;
 	@FXML
 	private Button btnStop;
-//	@FXML
-//	private TextArea resultTextArea;
 	@FXML
 	private TableView<TableElement> sitesTable;
-
 	@FXML
 	private TableView<TableElement> resultTable;
 
+	private HostServices hostServices;
+	private Hashtable<Object, String> controls;
+	private List<Downloader> downloaderPool;
+	private ObservableList<TableElement> sites = FXCollections.observableArrayList();
 	private ObservableList<TableElement> jobPossitions = FXCollections.observableArrayList();
-	private AtomicInteger counter = new AtomicInteger(1);
+	private AtomicInteger fetchCounter = new AtomicInteger(1);
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -66,7 +64,19 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 		btnDownload.setOnAction(this);
 		btnStop.setOnAction(this);
 
-		ObservableList<TableElement> sites = FXCollections.observableArrayList();
+		buildSitesTable();
+		loadTableWithSites();
+		addColumnsToResultTable();
+		resultTable.setItems(jobPossitions);
+		this.initThreadPool();
+	}
+
+	/**
+	 * A method that makes {@link Observable} all {@link JobSite} objects. Builds
+	 * {@link Hyperlink} for each site and attach listener to it.
+	 */
+	private void loadTableWithSites() {
+
 		CrawlerApp.jobSites.forEach(site -> {
 			try {
 				Hyperlink link = new Hyperlink(site.getAddress());
@@ -76,29 +86,19 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 			} catch (Exception e) {
 			}
 		});
-
-		addColumnsToSitesTable();
 		sitesTable.setItems(sites);
-
-		addColumnsToResultTable();
-		resultTable.setItems(jobPossitions);
-
-		this.initThreadPool();
 	}
 
 	private void initThreadPool() {
 		downloaderPool = new ArrayList<Downloader>();
-
 		List<JobSite> sites = CrawlerUtil.getJobSitesCollection();
 		JobSite jobsBg = sites.get(0);
 		MultiPageDownloader downloader = new MultiPageDownloader(jobsBg, Timeouts.MIDDLE, 1);
 		downloader.setParent(this);
-
 		downloaderPool.add(downloader);
-
 	}
 
-	private void addColumnsToSitesTable() {
+	private void buildSitesTable() {
 		addStringColumn(sitesTable, "#", "id");
 		addStringColumn(sitesTable, "name", "name");
 		addLinkColumn(sitesTable, "address", "hyperLink");
@@ -198,14 +198,10 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 				private final Button btn = new Button(supportColumn);
 				{
 					btn.setOnAction((ActionEvent event) -> {
-
 						if ("edit".equals(supportColumn)) {
 							TableElement selected = getTableView().getItems().get(getIndex());
 							openEditSiteDialog(selected);
-						} else if ("run".equals(supportColumn)) {
-							System.out.println("RUN");
 						}
-
 					});
 				}
 
@@ -224,23 +220,22 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 	}
 
 	private void openEditSiteDialog(TableElement jobSite) {
-		System.out.println("selectedData: " + jobSite);
+
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("Dialog.fxml"));
 			Parent root = loader.load();
-			DialogControler controller = loader.getController();
-			// controller.initObject(jobSite);
-
+			DialogController controller = loader.getController();
+			controller.setSite((JobSite) jobSite);
 			Stage stage = new Stage();
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.setTitle("Edit site data");
 			stage.setScene(new Scene(root));
 			stage.show();
+
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				public void handle(WindowEvent we) {
-					System.out.println("Stage is closing");
-					System.out.println("Job site new URL: " + ((JobSite) jobSite).getUrl());
-
+					sites.clear();
+					sites.addAll(CrawlerApp.jobSites);
 					we.consume();
 					stage.close();
 				}
@@ -262,7 +257,7 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 		Hyperlink link = new Hyperlink(position.getLink());
 		position.setHyperLink(link);
 		link.setOnAction(this);
-		position.setId(counter.getAndIncrement());
+		position.setId(fetchCounter.getAndIncrement());
 		jobPossitions.add(position);
 	}
 }
