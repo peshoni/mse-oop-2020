@@ -36,7 +36,10 @@ public class TestCrawler {
 		MultiPageWorker multiPageSecond = (MultiPageWorker) DownloaderFactory.getDownloader(null, js2, null);
 		multiPageSecond.downloadJobsPosistions();
 
-		while (multiPage.isAlive() && multiPageSecond.isAlive()) {
+		while (multiPage.isAlive()) {
+		}
+		while (multiPageSecond.isAlive()) {
+
 		}
 		assertEquals((multiPage.getSite().getDownloadLimit() + multiPageSecond.getSite().getDownloadLimit()),
 				(multiPage.getFetchedItemsCounter() + multiPageSecond.getFetchedItemsCounter()));
