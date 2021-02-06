@@ -1,33 +1,33 @@
 package com.mse.oop.crawler.core;
-///**
-// * 
-// */
-//package com.mse.pesho.crawler.core;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-///**
-// * Using Observer pattern
-// * 
-// * @author Petar Ivanov - petarivanovgap@gmail.com/pesho02@abv.bg
-// *
-// */
-//public class WorkersPool {
-//	private List<RandomTimeWorker> workers;
-//
-//	public WorkersPool() {
-//		this.workers = new ArrayList<RandomTimeWorker>();
-//	}
-//
-//	/**
-//	 * Appends the {@link RandomTimeWorker} to the end of this list.
-//	 * 
-//	 * @param worker
-//	 * @return
-//	 */
-//	public boolean addWorker(RandomTimeWorker worker) {
-//		return this.workers.add(worker);
-//	}
-//
-//}
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Used Observer design pattern
+ * 
+ * 
+ * @author Petar Ivanov - pesho02@abv.bg
+ *
+ */
+public class WorkersPool {
+	private List<Downloader> workers;
+
+	public WorkersPool() {
+		this.workers = new ArrayList<Downloader>();
+	}
+
+	/**
+	 * Appends the {@link Downloader} to the end of this list.
+	 * 
+	 * @param worker
+	 * @return
+	 */
+	public boolean addWorker(Downloader worker) {
+		return this.workers.add(worker);
+	}
+
+	public void runAll() {
+		workers.forEach(e -> e.downloadJobsPosistions());
+	}
+}

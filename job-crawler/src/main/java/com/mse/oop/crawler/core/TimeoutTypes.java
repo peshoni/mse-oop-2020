@@ -11,37 +11,38 @@ import java.util.Random;
 
 /**
  *
- * Timeouts that can be used {@link #SMALL} {@link #MIDDLE} {@link #LARGE}
+ * Timeouts that can be used {@link #TEST} {@link #FAST} {@link #SLOWER}
+ * {@link #SLOWEST}
  * 
  * @author Petar Ivanov - pesho02@abv.bg
  *
  */
-public enum Timeouts {
+public enum TimeoutTypes {
 	/**
 	 * This is only for test purposes! Method for get random number will always
 	 * returns ZERO.
 	 */
 	TEST(0, 0, 0),
 	/**
-	 * Type 1 with random value in range : 500ms - 3000ms
+	 * Type 1 with random value in range : 500 - 2000
 	 */
-	SMALL(1, 500, 3000),
+	FAST(1, 500, 2000),
 	/**
 	 * Type 2 with random value in range : 2000 - 5000
 	 */
-	MIDDLE(2, 2000, 5000),
+	SLOWER(2, 2000, 5000),
 	/**
-	 * Type 3 with random value in range : 3000 - 8000
+	 * Type 3 with random value in range : 5000 - 8000
 	 */
-	LARGE(3, 3000, 8000);
+	SLOWEST(3, 5000, 8000);
 
 	private int typeId;
 	private int min;
 	private int max;
-	private final static Map<Integer, Timeouts> timeoutsMap = stream(Timeouts.values())
+	private final static Map<Integer, TimeoutTypes> timeoutsMap = stream(TimeoutTypes.values())
 			.collect(toMap(timeout -> timeout.typeId, timeout -> timeout));
 
-	private Timeouts(int type, int min, int max) {
+	private TimeoutTypes(int type, int min, int max) {
 		this.typeId = type;
 		this.min = min;
 		this.max = max;
@@ -68,7 +69,7 @@ public enum Timeouts {
 		return this.typeId;
 	}
 
-	public static Timeouts valueOf(int typeId) {
+	public static TimeoutTypes valueOf(int typeId) {
 		return timeoutsMap.get(typeId);
 	}
 

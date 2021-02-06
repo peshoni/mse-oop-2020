@@ -52,9 +52,7 @@
                       <RowConstraints maxHeight="205.0" minHeight="10.0" prefHeight="205.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Button fx:id="btnDownload" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="100" text="download" GridPane.rowIndex="3" />
-                        <Button fx:id="btnStop" minHeight="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="100" text="stop" GridPane.rowIndex="1" />
-                       
+                        <Button fx:id="btnDownload" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="100" text="download" GridPane.rowIndex="2" />
                      </children>
                      <GridPane.margin>
                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />

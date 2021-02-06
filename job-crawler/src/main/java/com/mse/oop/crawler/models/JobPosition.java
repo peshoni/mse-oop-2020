@@ -3,7 +3,7 @@
  */
 package com.mse.oop.crawler.models;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 import javafx.scene.control.Hyperlink;
 
@@ -14,32 +14,15 @@ import javafx.scene.control.Hyperlink;
  */
 public class JobPosition implements TableElement {
 	private int id;
-	private Timestamp downloadedAt;
-	private String label;
-
-	@Override
-	public String toString() {
-		return "JobPosition [id=" + id + ", downloadedAt=" + downloadedAt + ", label=" + label + ", link=" + link
-				+ ", position=" + position + ", description=" + description + ", refNumber=" + refNumber + ", location="
-				+ location + ", salary=" + salary + "]";
-	}
-
+	private Date downloadedAt;
+	private String siteName;
 	private String link;
 	private Hyperlink hyperLink;
-
 	private String position;
 	private String description;
 	private String refNumber;
 	private String location;
 	private String salary;
-
-	public String getLabel() {
-		return label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
-	}
 
 	public String getLink() {
 		return link;
@@ -81,11 +64,11 @@ public class JobPosition implements TableElement {
 		this.salary = salary;
 	}
 
-	public Timestamp getDownloadedAt() {
+	public Date getDownloadedAt() {
 		return downloadedAt;
 	}
 
-	public void setDownloadedAt(Timestamp downloadedAt) {
+	public void setDownloadedAt(Date downloadedAt) {
 		this.downloadedAt = downloadedAt;
 	}
 
@@ -111,6 +94,21 @@ public class JobPosition implements TableElement {
 
 	public void setHyperLink(Hyperlink hyperLink) {
 		this.hyperLink = hyperLink;
+	}
+
+	public String getSiteName() {
+		return siteName;
+	}
+
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
+	}
+
+	@Override
+	public String toString() {
+		return "JobPosition [id=" + id + ", downloadedAt=" + downloadedAt + ", siteName=" + siteName + ", link=" + link
+				+ ", hyperLink=" + hyperLink + ", position=" + position + ", description=" + description
+				+ ", refNumber=" + refNumber + ", location=" + location + ", salary=" + salary + "]";
 	}
 
 }

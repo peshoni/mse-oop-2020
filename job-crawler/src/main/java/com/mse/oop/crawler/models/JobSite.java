@@ -3,29 +3,38 @@
  */
 package com.mse.oop.crawler.models;
 
+import com.mse.oop.crawler.core.TimeoutTypes;
+
 import javafx.scene.control.Hyperlink;
 
 /**
+ * Class that holds settings and selectors for site connection and retrieving
+ * information.
+ * 
  * @author Petar Ivanov - pesho02@abv.bg
  *
  */
 public class JobSite implements TableElement {
-	private int maxItemsPerDownload;
-	private int timeoutType = 1;
 	private long id;
+	private TimeoutTypes timeoutType = TimeoutTypes.FAST;
+
 	private String name;
 	private String siteType;
 	private String address;
-	private String jobMainPageUrl;
+
 	private String url;
+
 	private Hyperlink hyperLink;
 	private String rowSelector;
+
 	private String selectorPaginator;
 	private String selectorPosition;
 	private String selectorJobDescription;
 	private String selectorRefNumber;
 	private String selectorLocaion;
 	private String selectorSalary;
+
+	private int downloadLimit;
 
 	public long getId() {
 		return id;
@@ -57,14 +66,6 @@ public class JobSite implements TableElement {
 
 	public void setAddress(String address) {
 		this.address = address;
-	}
-
-	public String getJobMainPageUrl() {
-		return jobMainPageUrl;
-	}
-
-	public void setJobMainPageUrl(String jobMainPageUrl) {
-		this.jobMainPageUrl = jobMainPageUrl;
 	}
 
 	public String getUrl() {
@@ -139,20 +140,20 @@ public class JobSite implements TableElement {
 		this.selectorSalary = selectorSalary;
 	}
 
-	public int getMaxItemsPerDownload() {
-		return maxItemsPerDownload;
-	}
-
-	public void setMaxItemsPerDownload(int maxItemsPerDownload) {
-		this.maxItemsPerDownload = maxItemsPerDownload;
-	}
-
-	public int getTimeoutType() {
+	public TimeoutTypes getTimeoutType() {
 		return timeoutType;
 	}
 
-	public void setTimeoutType(int timeoutType) {
+	public void setTimeoutType(TimeoutTypes timeoutType) {
 		this.timeoutType = timeoutType;
+	}
+
+	public int getDownloadLimit() {
+		return downloadLimit;
+	}
+
+	public void setDownloadLimit(int downloadLimit) {
+		this.downloadLimit = downloadLimit;
 	}
 
 }

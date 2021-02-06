@@ -5,60 +5,46 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.mse.oop.crawler.core.DownloaderFactory;
 import com.mse.oop.crawler.core.MultiPageWorker;
-import com.mse.oop.crawler.core.Timeouts;
+import com.mse.oop.crawler.core.TimeoutTypes;
+import com.mse.oop.crawler.models.JobSite;
 import com.mse.oop.crawler.utils.CrawlerUtil;
 
 public class TestCrawler {
 
 	@Test
-	public void testMultiPagePaginator() {
-
-		MultiPageWorker paginator = new MultiPageWorker(CrawlerUtil.getJobSitesCollection().get(0), 6565, 15, 10, 3,
-				Timeouts.TEST);
-		Thread thr = new Thread(paginator);
-		thr.start();
-		while (thr.isAlive()) {
+	public void testMultiPageThread() {
+		JobSite js = CrawlerUtil.getJobSitesCollection().get(0);
+		js.setTimeoutType(TimeoutTypes.TEST);
+		MultiPageWorker multiPage = (MultiPageWorker) DownloaderFactory.getDownloader(null, js, null);
+		multiPage.downloadJobsPosistions();
+		while (multiPage.isAlive()) {
 		}
-		assertEquals(45, paginator.getFetchedItemsCounter());
-		assertEquals(3, paginator.getPageReadedCounter());
+		assertEquals(multiPage.getSite().getDownloadLimit(), multiPage.getFetchedItemsCounter());
 	}
 
-	// @Test
-	public void testMultiPagePaginatorWithMoreThanAvailablePage() {
-		int allItems = 6565;
-		MultiPageWorker paginator = new MultiPageWorker(CrawlerUtil.getJobSitesCollection().get(0), allItems, 15, 10,
-				700, Timeouts.TEST);
-		Thread thr = new Thread(paginator);
-		thr.start();
-		while (thr.isAlive()) {
+	@Test
+	public void testTwoMultiPageThreads() {
+		JobSite js = CrawlerUtil.getJobSitesCollection().get(0);
+		js.setTimeoutType(TimeoutTypes.TEST);
+		MultiPageWorker multiPage = (MultiPageWorker) DownloaderFactory.getDownloader(null, js, null);
+		multiPage.downloadJobsPosistions();
+
+		JobSite js2 = CrawlerUtil.getJobSitesCollection().get(1);
+		js2.setTimeoutType(TimeoutTypes.TEST);
+		MultiPageWorker multiPageSecond = (MultiPageWorker) DownloaderFactory.getDownloader(null, js2, null);
+		multiPageSecond.downloadJobsPosistions();
+
+		while (multiPage.isAlive() && multiPageSecond.isAlive()) {
 		}
-		assertEquals(allItems, paginator.getFetchedItemsCounter());
+		assertEquals((multiPage.getSite().getDownloadLimit() + multiPageSecond.getSite().getDownloadLimit()),
+				(multiPage.getFetchedItemsCounter() + multiPageSecond.getFetchedItemsCounter()));
 	}
 
 	@Test
 	public void testEnumeratorGetRandomRange() {
-		int smallRange = Timeouts.valueOf(Timeouts.SMALL.getTypeId()).getRandomNumberInInterval();
+		int smallRange = TimeoutTypes.valueOf(TimeoutTypes.FAST.getTypeId()).getRandomNumberInInterval();
 		assertTrue(smallRange >= 500 && smallRange <= 3000);
 	}
-
-//	// @Test
-//	public void testWorkerCouter() {
-//		RandomTimeWorker worker = new RandomTimeWorker(10, Timeouts.SMALL, 5);
-//		Thread thr = new Thread(worker);
-//		thr.start();
-//		while (thr.isAlive()) {
-//
-//		}
-//		assertEquals(11, worker.getCallsCounter());
-//	}
-//
-//	// @Test // (expected = InterruptedException.class)
-//	public void testWorkerCouter2() {
-//		RandomTimeWorker worker = new RandomTimeWorker(10, Timeouts.SMALL, 5);
-//		Thread thr = new Thread(worker);
-//		thr.start();
-//		thr.interrupt();
-//	}
-
 }

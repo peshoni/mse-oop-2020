@@ -2,16 +2,17 @@ package com.mse.oop.crawler.gui;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Observable;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.mse.oop.crawler.core.Downloader;
-import com.mse.oop.crawler.core.MultiPageDownloader;
-import com.mse.oop.crawler.core.Timeouts;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+import com.mse.oop.crawler.core.DownloaderFactory;
+import com.mse.oop.crawler.core.WorkersPool;
 import com.mse.oop.crawler.models.JobPosition;
 import com.mse.oop.crawler.models.JobSite;
 import com.mse.oop.crawler.models.TableElement;
@@ -42,92 +43,115 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 	@FXML
 	private Button btnDownload;
 	@FXML
-	private Button btnStop;
-	@FXML
 	private TableView<TableElement> sitesTable;
 	@FXML
 	private TableView<TableElement> resultTable;
 
 	private HostServices hostServices;
 	private Hashtable<Object, String> controls;
-	private List<Downloader> downloaderPool;
-	private ObservableList<TableElement> sites = FXCollections.observableArrayList();
-	private ObservableList<TableElement> jobPossitions = FXCollections.observableArrayList();
+	private WorkersPool pool;
+	private ObservableList<TableElement> jobSites = FXCollections.observableArrayList();
+	private ObservableList<TableElement> jobPositions = FXCollections.observableArrayList();
 	private AtomicInteger fetchCounter = new AtomicInteger(1);
+	private WebDriver webDriver;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		controls = new Hashtable<Object, String>();
-		controls.put(btnDownload, btnDownload.getId());
-		System.out.println(btnDownload.getId());
-		controls.put(btnStop, btnStop.getId());
-		btnDownload.setOnAction(this);
-		btnStop.setOnAction(this);
-
+		addChromeDriver();
+		turnOnButtons();
 		buildSitesTable();
-		loadTableWithSites();
-		addColumnsToResultTable();
-		resultTable.setItems(jobPossitions);
-		this.initThreadPool();
+		loadSitesTableWithData();
+		buildResultTable();
+		resultTable.setItems(jobPositions);
+		pool = new WorkersPool();
+	}
+
+	/**
+	 * Loads the {@link ChromeDriver} asynchronously.
+	 */
+	private void addChromeDriver() {
+		Thread thr = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					System.setProperty("webdriver.chrome.driver", "C:\\tmp\\selenium\\chromedriver.exe");
+					ChromeOptions options = new ChromeOptions();
+					options.addArguments("--headless");
+					options.addArguments("--disable-gpu");
+					options.addArguments("--window-size=1400,800");
+					webDriver = new ChromeDriver(options);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		thr.setDaemon(true);
+		thr.start();
 	}
 
 	/**
 	 * A method that makes {@link Observable} all {@link JobSite} objects. Builds
 	 * {@link Hyperlink} for each site and attach listener to it.
 	 */
-	private void loadTableWithSites() {
-
+	private void loadSitesTableWithData() {
 		CrawlerApp.jobSites.forEach(site -> {
 			try {
 				Hyperlink link = new Hyperlink(site.getAddress());
 				site.setHyperLink(link);
 				link.setOnAction(this);
-				sites.add(site);
+				jobSites.add(site);
 			} catch (Exception e) {
+				System.out.println(e.getMessage());
 			}
 		});
-		sitesTable.setItems(sites);
-	}
-
-	private void initThreadPool() {
-		downloaderPool = new ArrayList<Downloader>();
-		List<JobSite> sites = CrawlerUtil.getJobSitesCollection();
-		JobSite jobsBg = sites.get(0);
-		MultiPageDownloader downloader = new MultiPageDownloader(jobsBg, Timeouts.MIDDLE, 1);
-		downloader.setParent(this);
-		downloaderPool.add(downloader);
+		sitesTable.setItems(jobSites);
 	}
 
 	private void buildSitesTable() {
-		addStringColumn(sitesTable, "#", "id");
-		addStringColumn(sitesTable, "name", "name");
+		addStringColumn(sitesTable, "#", "id", 30);
+		addStringColumn(sitesTable, "name", "name", 0);
 		addLinkColumn(sitesTable, "address", "hyperLink");
-		addStringColumn(sitesTable, "type", "siteType");
-		addStringColumn(sitesTable, "limit per download", "maxItemsPerDownload");
+		addStringColumn(sitesTable, "type", "siteType", 0);
+		addStringColumn(sitesTable, "download limit", "downloadLimit", 0);
 		addActionColumn(sitesTable, "edit", "edit");
 	}
 
-	private void addColumnsToResultTable() {
-		addStringColumn(resultTable, "#", "id");
-//		private String label;
-//		private String link; 
-//		private String description; 
-		addStringColumn(resultTable, "downloaded", "downloadedAt");
-		addStringColumn(resultTable, "position", "position");
-		addStringColumn(resultTable, "salary", "salary");
-		addStringColumn(resultTable, "refNumber", "refNumber");
-		addStringColumn(resultTable, "location", "location");
+	private void buildResultTable() {
+		addStringColumn(resultTable, "#", "id", 30);
+		addStringColumn(resultTable, "site", "siteName", 200);
+		addStringColumn(resultTable, "downloaded", "downloadedAt", 0);
+		addStringColumn(resultTable, "position", "position", 0);
+		addStringColumn(resultTable, "salary", "salary", 0);
+		addStringColumn(resultTable, "refNumber", "refNumber", 0);
+		addStringColumn(resultTable, "location", "location", 0);
 		addLinkColumn(resultTable, "link", "hyperLink");
-
 	}
 
-	private void addStringColumn(TableView<TableElement> table, String label, String property) {
+	/**
+	 * Adding column in table with String values
+	 * 
+	 * @param table
+	 * @param label
+	 * @param property
+	 * @param width
+	 */
+	private void addStringColumn(TableView<TableElement> table, String label, String property, double width) {
 		TableColumn<TableElement, String> column = new TableColumn<>(label);
 		column.setCellValueFactory(new PropertyValueFactory<>(property));
-
+		if (width > 0) {
+			column.setMinWidth(width);
+			column.setMaxWidth(width);
+		}
 		table.getColumns().add(column);
 	}
 
+	/**
+	 * Adds a column with hyper links
+	 * 
+	 * @param table    {@link TableView}
+	 * @param label    Column label
+	 * @param property value for linking
+	 */
 	private void addLinkColumn(TableView<TableElement> table, String label, String property) {
 		TableColumn<TableElement, Hyperlink> column = new TableColumn<>(label);
 		column.setCellValueFactory(new PropertyValueFactory<>(property));
@@ -135,12 +159,31 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 		table.getColumns().add(column);
 	}
 
+	/**
+	 * Adds column with buttons
+	 * 
+	 * @param table       {@link TableView}
+	 * @param label       Column label
+	 * @param buttonLabel
+	 */
 	private void addActionColumn(TableView<TableElement> table, String label, String buttonLabel) {
 		TableColumn<TableElement, Void> column = new TableColumn<TableElement, Void>(label);
 		column.setCellFactory(new ButtonCell(buttonLabel));
 		table.getColumns().add(column);
 	}
 
+	/**
+	 * Puts buttons in map, and attach listeners
+	 */
+	private void turnOnButtons() {
+		controls = new Hashtable<Object, String>();
+		controls.put(btnDownload, btnDownload.getId());
+		btnDownload.setOnAction(this);
+	}
+
+	/**
+	 * Event handler for buttons and links
+	 */
 	@Override
 	public void handle(ActionEvent event) {
 		System.out.println(event.getSource().getClass().getSimpleName());
@@ -148,9 +191,21 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 		case "Button":
 			switch (controls.get(event.getSource())) {
 			case "btnDownload":
-				downloaderPool.forEach(e -> e.downloadJobsPosistions());
-				break;
-			case "btnStop":
+				try {
+					if (webDriver != null) {
+						// jobSites.forEach(site -> pool.addWorker(DownloaderFactory.getDownloader(this,
+						// (JobSite) site, webDriver)));
+
+						pool.addWorker(DownloaderFactory.getDownloader(this, (JobSite) jobSites.get(2), webDriver));
+						pool.runAll();
+					} else {
+						CrawlerUtil.showError("ChromeDriver driver loading failed.");
+					}
+				} catch (Exception e) {
+					System.out.println("Pool init was failed.");
+					e.printStackTrace();
+				}
+				event.consume();
 				break;
 			default:
 				break;
@@ -200,7 +255,7 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 					btn.setOnAction((ActionEvent event) -> {
 						if ("edit".equals(supportColumn)) {
 							TableElement selected = getTableView().getItems().get(getIndex());
-							openEditSiteDialog(selected);
+							openEditSiteDialog((JobSite) selected);
 						}
 					});
 				}
@@ -219,7 +274,12 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 		}
 	}
 
-	private void openEditSiteDialog(TableElement jobSite) {
+	/**
+	 * Opens edit dialog for {@link JobSite} data
+	 * 
+	 * @param jobSite
+	 */
+	private void openEditSiteDialog(JobSite jobSite) {
 
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("Dialog.fxml"));
@@ -234,8 +294,8 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				public void handle(WindowEvent we) {
-					sites.clear();
-					sites.addAll(CrawlerApp.jobSites);
+					jobSites.clear();
+					jobSites.addAll(CrawlerApp.jobSites);
 					we.consume();
 					stage.close();
 				}
@@ -258,6 +318,6 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 		position.setHyperLink(link);
 		link.setOnAction(this);
 		position.setId(fetchCounter.getAndIncrement());
-		jobPossitions.add(position);
+		jobPositions.add(position);
 	}
 }

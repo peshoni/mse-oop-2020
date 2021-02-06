@@ -43,7 +43,7 @@ public class CrawlerApp extends Application {
 	}
 
 	/**
-	 * Opens the specified URI in a new browser window or tab.
+	 * Opens the specified URI in a new browser window.
 	 * 
 	 * @param link
 	 * @throws Exception

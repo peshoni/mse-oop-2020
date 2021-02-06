@@ -6,14 +6,19 @@ package com.mse.oop.crawler.gui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.mse.oop.crawler.core.TimeoutTypes;
 import com.mse.oop.crawler.models.JobSite;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -39,13 +44,31 @@ public class DialogController implements Initializable, EventHandler<ActionEvent
 	private Button btnDialogOk;
 	@FXML
 	private Button btnDialogCancel;
+	@FXML
+	private ComboBox<TimeoutTypes> comboTimeout;
+	@FXML
+	private TextField positionLimit;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		btnDialogCancel.setOnAction(this);
 		btnDialogOk.setOnAction(this);
+		ObservableList<TimeoutTypes> options = FXCollections.observableArrayList(TimeoutTypes.FAST, TimeoutTypes.SLOWER,
+				TimeoutTypes.SLOWEST);
+		comboTimeout.setItems(options);
+
+		positionLimit.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue.matches("\\d*"))
+				return;
+			positionLimit.setText(newValue.replaceAll("[^\\d]", ""));
+		});
 	}
 
+	/**
+	 * Setter method for JobSite
+	 * 
+	 * @param site
+	 */
 	public void setSite(JobSite site) {
 		this.site = site;
 		siteName.setText(site.getName());
@@ -55,6 +78,8 @@ public class DialogController implements Initializable, EventHandler<ActionEvent
 		selectorRefNumber.setText(site.getSelectorRefNumber());
 		selectorLocation.setText(site.getSelectorLocaion());
 		selectorSalary.setText(site.getSelectorSalary());
+		comboTimeout.getSelectionModel().select(site.getTimeoutType().getTypeId() - 1);
+		positionLimit.setText(String.valueOf(site.getDownloadLimit()));
 	}
 
 	@Override
@@ -78,6 +103,8 @@ public class DialogController implements Initializable, EventHandler<ActionEvent
 		site.setSelectorRefNumber(selectorRefNumber.getText());
 		site.setSelectorLocaion(selectorLocation.getText());
 		site.setSelectorSalary(selectorSalary.getText());
+		site.setTimeoutType(comboTimeout.getValue());
+		site.setDownloadLimit(Integer.parseInt(positionLimit.getText()));
 	}
 
 	public JobSite getSite() {
