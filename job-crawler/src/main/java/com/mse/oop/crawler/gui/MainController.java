@@ -40,6 +40,7 @@ import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 
 public class MainController implements Initializable, EventHandler<ActionEvent> {
+
 	@FXML
 	private Button btnDownload;
 	@FXML
@@ -193,10 +194,10 @@ public class MainController implements Initializable, EventHandler<ActionEvent> 
 			case "btnDownload":
 				try {
 					if (webDriver != null) {
-						// jobSites.forEach(site -> pool.addWorker(DownloaderFactory.getDownloader(this,
-						// (JobSite) site, webDriver)));
-
-						pool.addWorker(DownloaderFactory.getDownloader(this, (JobSite) jobSites.get(2), webDriver));
+						jobSites.forEach(site -> pool
+								.addWorker(DownloaderFactory.getDownloader(this, (JobSite) site, webDriver)));
+						// pool.addWorker(DownloaderFactory.getDownloader(this, (JobSite)
+						// jobSites.get(2), webDriver));
 						pool.runAll();
 					} else {
 						CrawlerUtil.showError("ChromeDriver driver loading failed.");
