@@ -3,12 +3,12 @@ package com.mse.db.pharma.data.item;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import com.mse.db.pharma.fxutils.AtomicIndex;
-import com.mse.db.pharma.fxutils.TableElement;
+import com.mse.db.pharma.utils.AtomicIndex;
+import com.mse.db.pharma.utils.TableElement;
 
 public class Item extends AtomicIndex implements TableElement {
-	private String sku;// unique
-	private String description;
+	private String sku = "";// unique
+	private String description = "";
 	private double price;
 	private double salePrice;
 	private double deleted;

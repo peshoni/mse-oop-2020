@@ -26,16 +26,12 @@ public class PharmaApp extends Application {
 			Parent root = loader.load();
 			primaryStage.setTitle("Аптечен склад");
 			primaryStage.setMaximized(true);
-			// MainController controller = loader.getController();
-			// controller.setHostServices(getHostServices());
 			primaryStage.setScene(new Scene(root, 800, 600));
 			primaryStage.show();
-
 			primaryStage.setOnCloseRequest(s -> {
 				s.consume();
 				primaryStage.close();
 			});
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

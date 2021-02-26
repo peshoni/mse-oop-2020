@@ -4,9 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class Medicine extends Item {
-	private int resipeRequired;
-	private int minAge;
-	private String contraindications;
+	private int resipeRequired = 0;
+	private int minAge = 0;
+	private String contraindications = "";
 
 	public Medicine() {
 	}

@@ -6,8 +6,8 @@ package com.mse.db.pharma.data.transaction;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mse.db.pharma.fxutils.AtomicIndex;
-import com.mse.db.pharma.fxutils.TableElement;
+import com.mse.db.pharma.utils.AtomicIndex;
+import com.mse.db.pharma.utils.TableElement;
 
 /**
  * 

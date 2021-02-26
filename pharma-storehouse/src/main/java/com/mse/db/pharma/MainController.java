@@ -1,27 +1,31 @@
 package com.mse.db.pharma;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import com.mse.db.pharma.data.contragents.Contragent;
 import com.mse.db.pharma.data.contragents.Customer;
 import com.mse.db.pharma.data.contragents.Shipper;
 import com.mse.db.pharma.data.contragents.Supplier;
+import com.mse.db.pharma.data.item.Item;
 import com.mse.db.pharma.data.item.Medicine;
 import com.mse.db.pharma.data.item.Supplement;
 import com.mse.db.pharma.data.transaction.Order;
-import com.mse.db.pharma.data.transaction.Shippings;
+import com.mse.db.pharma.data.transaction.Shipping;
 import com.mse.db.pharma.data.transaction.Supply;
 import com.mse.db.pharma.enums.ContragentTypes;
 import com.mse.db.pharma.enums.ItemTypes;
-import com.mse.db.pharma.fxutils.DBUtil;
-import com.mse.db.pharma.fxutils.FXUtill;
-import com.mse.db.pharma.fxutils.TableElement;
 import com.mse.db.pharma.repository.ContragentsRepository;
 import com.mse.db.pharma.repository.ItemRepository;
+import com.mse.db.pharma.repository.Repository;
 import com.mse.db.pharma.repository.TransactionsRepository;
+import com.mse.db.pharma.utils.DBUtil;
+import com.mse.db.pharma.utils.FXUtill;
+import com.mse.db.pharma.utils.TableElement;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -31,18 +35,24 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class MainController implements Initializable, EventHandler<ActionEvent>, ChangeListener<Tab> {
-	ContragentsRepository contragentsRepository;
-	ItemRepository itemRepository;
-	TransactionsRepository transactionsRepository;
+	private ContragentsRepository contragentsRepository;
+	private ItemRepository itemRepository;
+	private TransactionsRepository transactionsRepository;
 //ITEMS
 	@FXML
 	private TabPane tabPahe;
@@ -85,10 +95,8 @@ public class MainController implements Initializable, EventHandler<ActionEvent>,
 
 	private ObservableList<TableElement> contragents = FXCollections.observableArrayList();
 	private ObservableList<TableElement> items = FXCollections.observableArrayList();
-
 	private ObservableList<TableElement> supplies = FXCollections.observableArrayList();
 	private ObservableList<TableElement> supplyLines = FXCollections.observableArrayList();
-
 	private ObservableList<TableElement> orders = FXCollections.observableArrayList();
 	private ObservableList<TableElement> orderLines = FXCollections.observableArrayList();
 
@@ -99,9 +107,6 @@ public class MainController implements Initializable, EventHandler<ActionEvent>,
 	private Label labelOrderDate, labelOrderCustomer, labelOrderAddress, labelOrderPhone, labelOrderId;
 	@FXML
 	private Label labelSupplyId, labelSupplyDate, labelSupplySupplier, labelSupplyPhone;
-
-	// private ObservableList<TableElement> jobPositions =
-	// FXCollections.observableArrayList();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -114,8 +119,6 @@ public class MainController implements Initializable, EventHandler<ActionEvent>,
 		loadChoiceBoxes();
 
 		tabPahe.getSelectionModel().selectedItemProperty().addListener(this);
-		// choiceItemType.getSelectionModel().selectFirst();
-		// tabPahe.getSelectionModel().selectLast();
 		tabPahe.getSelectionModel().selectFirst();
 
 		tableOrderParent.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -129,44 +132,11 @@ public class MainController implements Initializable, EventHandler<ActionEvent>,
 			}
 		});
 
-		// buildMedicinesTable();
-//		buildSupplementsTable();
-//
-
-//		try {
-//			List<Medicine> medicines = itemRepository.findAllMedicines();
-//			tableItems.getItems().addAll(medicines);
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-
-//		try {
-//			List<Supplement> supplements = itemRepository.findAllSupplement();
-//			tableItems.getItems().addAll(supplements);
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-
-//		Medicine m = new Medicine();
-//		m.setSku("alabala");
-//		m.setContraindications("no");
-//		tableItems.getItems().add(m);
-//
-//		Supplement sup = new Supplement();
-//		sup.setSku("brada");
-//		sup.setUsefulFor("big beard");
-//		tableItems.getItems().add(sup);
-
-		// this.items.add(m);
-
-		// buildOrdersTable();
-		// buildSuppliesTable();
-		// buildShippingTable();
 		FXUtill.buildOrdersTable(tableOrderParent, orders, this);
 		FXUtill.buildOrdersLinesTable(tableOrderLines, orderLines);
 		FXUtill.buildSuppliesTable(tableSupplyParent, supplies, this);
 		FXUtill.buildSupplyLinesTable(tableSupplyChild, supplyLines);
+		FXUtill.buildShippingsTable(tableShippingParent, shippings, this);
 	}
 
 	private void showOrderParameters(Order order) {
@@ -177,11 +147,9 @@ public class MainController implements Initializable, EventHandler<ActionEvent>,
 		labelOrderPhone.setText(order.getCustomer().getPhone());
 		orderLines.clear();
 		orderLines.addAll(order.getChilds());
-
 	}
 
 	private void showSupplyParameters(Supply supply) {
-		System.out.println(supply.toString());
 		labelSupplyId.setText("доставка: " + supply.getId());
 		labelSupplyDate.setText(supply.getSuppliedAt().toString());
 		labelSupplySupplier.setText(supply.getSuplierCompanyName());
@@ -189,10 +157,6 @@ public class MainController implements Initializable, EventHandler<ActionEvent>,
 		supplyLines.clear();
 		supplyLines.addAll(supply.getChilds());
 	}
-
-//	private int resipeRequired;
-//	private int minAge;
-//	private String contraindications;
 
 	/**
 	 * Loads {@link ChoiceBox} with values and sets default to `all`.
@@ -220,26 +184,24 @@ public class MainController implements Initializable, EventHandler<ActionEvent>,
 	}
 
 	/**
-	 * Event handler
+	 * Event handler for {@link Button} and {@link ChoiceBox}
 	 */
 	@SuppressWarnings("unchecked")
 	public void handle(ActionEvent event) {
-		// System.out.println(event.getSource().getClass().getSimpleName());
-
 		switch (event.getSource().getClass().getSimpleName()) {
 		case "Button":
 			switch (controls.get(event.getSource())) {
 			case "buttonAddItem":
-				System.out.println("add item");
+				openDialog(true, new Item(), "добавяне на артикул", itemRepository);
 				break;
 			case "buttonAddContragent":
-				System.out.println("add contragent");
+				openDialog(true, new Contragent(), "добавяне на на контрагент", contragentsRepository);
 				break;
 			case "buttonAddOrder":
-				System.out.println("add order");
+				openDialog(true, new Order(), "създаване на поръчка", transactionsRepository);
 				break;
 			case "buttonAddSupply":
-				System.out.println("add supply");
+				openDialog(true, new Supply(), "добавяне на доставка", transactionsRepository);
 				break;
 			default:
 				break;
@@ -247,11 +209,8 @@ public class MainController implements Initializable, EventHandler<ActionEvent>,
 			break;
 
 		case "ChoiceBox":
-
 			switch (controls.get(event.getSource())) {
-
 			case "choiceItemType":
-
 				tableItems.getColumns().clear();
 				ItemTypes itemType = ((ChoiceBox<ItemTypes>) event.getSource()).getValue();
 				switch (itemType) {
@@ -278,7 +237,6 @@ public class MainController implements Initializable, EventHandler<ActionEvent>,
 				default:
 					break;
 				}
-
 				break;
 
 			case "chooseContragentsType":
@@ -318,12 +276,10 @@ public class MainController implements Initializable, EventHandler<ActionEvent>,
 				default:
 					break;
 				}
-
 				break;
 			default:
 				break;
 			}
-
 			break;
 		default:
 			// do nothing
@@ -346,9 +302,10 @@ public class MainController implements Initializable, EventHandler<ActionEvent>,
 			selectFirstLineFromTable(tableOrderParent);
 			break;
 		case "tabShipping":
-			System.out.println("load shipping");
-			List<Shippings> shippings = transactionsRepository.findAllShippings();
-			shippings.forEach(System.out::println);
+			List<Shipping> shippings = transactionsRepository.findAllShippings();
+			this.shippings.clear();
+			this.shippings.addAll(shippings);
+			selectFirstLineFromTable(tableShippingParent);
 			break;
 		default:
 			break;
@@ -356,7 +313,8 @@ public class MainController implements Initializable, EventHandler<ActionEvent>,
 	}
 
 	/**
-	 * Sets the focus over first row of given table.
+	 * Sets the focus over first row of given table, to invoke loading of child
+	 * table.
 	 * 
 	 * @param table
 	 */
@@ -372,7 +330,49 @@ public class MainController implements Initializable, EventHandler<ActionEvent>,
 	}
 
 	public void edit(TableElement element) {
-		System.out.println("Edit: " + element.getClass().getSimpleName());
+		String label = "редактиране на ";
+		switch (element.getClass().getSimpleName()) {
+		case "Medicine":
+			label += "данни за лекарство";
+			openDialog(false, element, label, itemRepository);
+			break;
+		case "Supplement":
+			label += "данни за хранителна добавка";
+			openDialog(false, element, label, itemRepository);
+			break;
+		case "Supply":
+			label += "данни за доставка";
+			openDialog(false, element, label, transactionsRepository);
+			break;
+		case "Order":
+			label += "данни за поръчка";
+			openDialog(false, element, label, transactionsRepository);
+			break;
+		default:
+			break;
+		}
 	}
 
+	private void openDialog(boolean isCreate, TableElement element, String label, Repository repo) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("Dialog.fxml"));
+			Parent root = loader.load();
+			DialogController controller = loader.getController();
+			Stage stage = new Stage();
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.setTitle(label);
+			stage.setScene(new Scene(root));
+			stage.show();
+			controller.setParameters(isCreate, element, repo, stage);
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				public void handle(WindowEvent we) {
+					we.consume();
+					stage.close();
+				}
+			});
+		} catch (IOException e) {
+			e.printStackTrace();
+			FXUtill.showError(e.getMessage());
+		}
+	}
 }

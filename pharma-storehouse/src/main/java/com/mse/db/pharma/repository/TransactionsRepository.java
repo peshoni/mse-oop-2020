@@ -1,23 +1,23 @@
 package com.mse.db.pharma.repository;
 
-import static com.mse.db.pharma.fxutils.StaticQueries.DELETE_ORDER;
-import static com.mse.db.pharma.fxutils.StaticQueries.DELETE_ORDER_LINE;
-import static com.mse.db.pharma.fxutils.StaticQueries.DELETE_SHIPPING;
-import static com.mse.db.pharma.fxutils.StaticQueries.DELETE_SUPPLY;
-import static com.mse.db.pharma.fxutils.StaticQueries.DELETE_SUPPLY_LINE;
-import static com.mse.db.pharma.fxutils.StaticQueries.INSERT_ORDER;
-import static com.mse.db.pharma.fxutils.StaticQueries.INSERT_ORDER_LINE;
-import static com.mse.db.pharma.fxutils.StaticQueries.INSERT_SHIPPING;
-import static com.mse.db.pharma.fxutils.StaticQueries.INSERT_SUPPLY;
-import static com.mse.db.pharma.fxutils.StaticQueries.INSERT_SUPPLY_LINE;
-import static com.mse.db.pharma.fxutils.StaticQueries.SELECT_ALL_ORDERS;
-import static com.mse.db.pharma.fxutils.StaticQueries.SELECT_ALL_SHIPPINGS;
-import static com.mse.db.pharma.fxutils.StaticQueries.SELECT_ALL_SUPPLIES;
-import static com.mse.db.pharma.fxutils.StaticQueries.SELECT_ORDER_LINES_BY_ORDER_ID;
-import static com.mse.db.pharma.fxutils.StaticQueries.SELECT_SUPPLY_LINES_BY_SUPPLY_ID;
-import static com.mse.db.pharma.fxutils.StaticQueries.UPDATE_ORDER;
-import static com.mse.db.pharma.fxutils.StaticQueries.UPDATE_SHIPPING;
-import static com.mse.db.pharma.fxutils.StaticQueries.UPDATE_SUPPLY;
+import static com.mse.db.pharma.utils.StaticQueries.DELETE_ORDER;
+import static com.mse.db.pharma.utils.StaticQueries.DELETE_ORDER_LINE;
+import static com.mse.db.pharma.utils.StaticQueries.DELETE_SHIPPING;
+import static com.mse.db.pharma.utils.StaticQueries.DELETE_SUPPLY;
+import static com.mse.db.pharma.utils.StaticQueries.DELETE_SUPPLY_LINE;
+import static com.mse.db.pharma.utils.StaticQueries.INSERT_ORDER;
+import static com.mse.db.pharma.utils.StaticQueries.INSERT_ORDER_LINE;
+import static com.mse.db.pharma.utils.StaticQueries.INSERT_SHIPPING;
+import static com.mse.db.pharma.utils.StaticQueries.INSERT_SUPPLY;
+import static com.mse.db.pharma.utils.StaticQueries.INSERT_SUPPLY_LINE;
+import static com.mse.db.pharma.utils.StaticQueries.SELECT_ALL_ORDERS;
+import static com.mse.db.pharma.utils.StaticQueries.SELECT_ALL_SHIPPINGS;
+import static com.mse.db.pharma.utils.StaticQueries.SELECT_ALL_SUPPLIES;
+import static com.mse.db.pharma.utils.StaticQueries.SELECT_ORDER_LINES_BY_ORDER_ID;
+import static com.mse.db.pharma.utils.StaticQueries.SELECT_SUPPLY_LINES_BY_SUPPLY_ID;
+import static com.mse.db.pharma.utils.StaticQueries.UPDATE_ORDER;
+import static com.mse.db.pharma.utils.StaticQueries.UPDATE_SHIPPING;
+import static com.mse.db.pharma.utils.StaticQueries.UPDATE_SUPPLY;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -35,19 +35,16 @@ import com.mse.db.pharma.data.contragents.Customer;
 import com.mse.db.pharma.data.contragents.Shipper;
 import com.mse.db.pharma.data.contragents.Supplier;
 import com.mse.db.pharma.data.item.Item;
-import com.mse.db.pharma.data.transaction.OrderLine;
 import com.mse.db.pharma.data.transaction.Order;
-import com.mse.db.pharma.data.transaction.Shippings;
+import com.mse.db.pharma.data.transaction.OrderLine;
+import com.mse.db.pharma.data.transaction.Shipping;
 import com.mse.db.pharma.data.transaction.Supply;
 import com.mse.db.pharma.data.transaction.SupplyLine;
-import com.mse.db.pharma.fxutils.DBUtil;
+import com.mse.db.pharma.utils.DBUtil;
 
-/**
- * @author ivelin.dimitrov
- */
-public class TransactionsRepository {
+public class TransactionsRepository implements Repository {
 
-	Connection conn;
+	private Connection conn;
 
 	public TransactionsRepository(DBUtil dbUtil) {
 		this.conn = dbUtil.getConnection();
@@ -67,8 +64,8 @@ public class TransactionsRepository {
 		}
 	}
 
-	public List<Shippings> findAllShippings() {
-		List<Shippings> shippings;
+	public List<Shipping> findAllShippings() {
+		List<Shipping> shippings;
 		try (ResultSet resultset = conn.createStatement().executeQuery(SELECT_ALL_SHIPPINGS)) {
 			shippings = buildShippingsCollectionFromResultSet(resultset);
 			return shippings;
@@ -99,7 +96,7 @@ public class TransactionsRepository {
 		}
 	}
 
-	public Shippings findShippingById(long id) throws SQLException {
+	public Shipping findShippingById(long id) throws SQLException {
 		String query = SELECT_ALL_SHIPPINGS + " WHERE s.id = ?";
 		try (PreparedStatement statement = conn.prepareStatement(query)) {
 			statement.setLong(1, id);
@@ -121,7 +118,7 @@ public class TransactionsRepository {
 		System.out.println("Insert statement executed. Result present: " + statement.execute());
 	}
 
-	public void insertShipping(Shippings shipping) throws SQLException {
+	public void insertShipping(Shipping shipping) throws SQLException {
 		PreparedStatement statement = conn.prepareStatement(INSERT_SHIPPING);
 		shipping.decorateStatement(statement, true);
 		System.out.println("Insert statement executed. Result present: " + statement.execute());
@@ -151,7 +148,7 @@ public class TransactionsRepository {
 		System.out.println("Update statement executed. Result present: " + statement.execute());
 	}
 
-	public void updateShipping(Shippings shipping) throws SQLException {
+	public void updateShipping(Shipping shipping) throws SQLException {
 		PreparedStatement statement = conn.prepareStatement(UPDATE_SHIPPING);
 		shipping.decorateStatement(statement, false);
 		System.out.println("Update statement executed. Result present: " + statement.execute());
@@ -177,7 +174,7 @@ public class TransactionsRepository {
 		}
 	}
 
-	public void deleteShipping(Shippings shipping) throws SQLException {
+	public void deleteShipping(Shipping shipping) throws SQLException {
 		try (PreparedStatement statement = conn.prepareStatement(DELETE_SHIPPING)) {
 			statement.setLong(1, shipping.getId());
 			System.out.println("Delete statement executed. Result present: " + statement.execute());
@@ -286,11 +283,11 @@ public class TransactionsRepository {
 		return supplyList;
 	}
 
-	private static List<Shippings> buildShippingsCollectionFromResultSet(ResultSet resultset) {
-		List<Shippings> shippings = new ArrayList<>();
+	private static List<Shipping> buildShippingsCollectionFromResultSet(ResultSet resultset) {
+		List<Shipping> shippings = new ArrayList<>();
 		try {
 			while (resultset.next()) {
-				Shippings shipping = new Shippings();
+				Shipping shipping = new Shipping();
 				shipping.setId(resultset.getLong("id"));
 				shipping.setCreatedAt(resultset.getTimestamp("created_at"));
 				shipping.setShipper(getShipperFromResultsetRef(resultset));

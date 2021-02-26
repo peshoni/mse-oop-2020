@@ -48,7 +48,6 @@ public class Customer extends Contragent {
 		super.decorateStatement(preparedStatement, create);
 		preparedStatement.setString(index.getAndIncrement(), firstName);
 		preparedStatement.setString(index.getAndIncrement(), lastName);
-
 		if (!create) {
 			preparedStatement.setLong(index.getAndIncrement(), getId());
 		}

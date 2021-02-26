@@ -3,8 +3,8 @@ package com.mse.db.pharma.data.contragents;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import com.mse.db.pharma.fxutils.AtomicIndex;
-import com.mse.db.pharma.fxutils.TableElement;
+import com.mse.db.pharma.utils.AtomicIndex;
+import com.mse.db.pharma.utils.TableElement;
 
 public class Contragent extends AtomicIndex implements TableElement {
 	private long id;

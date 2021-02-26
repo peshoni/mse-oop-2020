@@ -1,4 +1,4 @@
-package com.mse.db.pharma.fxutils;
+package com.mse.db.pharma.utils;
 
 public class StaticQueries {
 

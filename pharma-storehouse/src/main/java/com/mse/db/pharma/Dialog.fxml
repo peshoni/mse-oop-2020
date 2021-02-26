@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="dialogAnchorPane" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mse.db.pharma.DialogController">
+   <children>
+      <GridPane fx:id="dialogGridPane" hgap="10.0" layoutX="14.0" layoutY="47.0" vgap="5.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="60.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="120.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+      </GridPane>
+      <Label fx:id="labelHeaderDialog" alignment="CENTER" layoutX="15.0" layoutY="14.0" prefHeight="30.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Button fx:id="buttonDialogSave" layoutX="534.0" layoutY="141.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="80.0" text="save" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" />
+      <Button fx:id="buttonDialogCancel" layoutX="474.0" layoutY="150.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="80.0" text="cancel" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="100.0" />
+      <ChoiceBox fx:id="dialogChoiceBox" layoutX="15.0" layoutY="14.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+     
+   </children>
+</AnchorPane>

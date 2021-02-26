@@ -8,9 +8,6 @@ import java.util.Calendar;
 import com.mse.db.pharma.data.contragents.Address;
 import com.mse.db.pharma.data.contragents.Customer;
 
-/**
- * @author ivelin.dimitrov
- */
 public class Order extends Parent<OrderLine> {
 	private long id;
 	private Customer customer;

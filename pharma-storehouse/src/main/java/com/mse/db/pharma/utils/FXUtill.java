@@ -1,13 +1,15 @@
-package com.mse.db.pharma.fxutils;
+package com.mse.db.pharma.utils;
 
 import com.mse.db.pharma.MainController;
 import com.mse.db.pharma.data.contragents.Contragent;
 import com.mse.db.pharma.data.item.Item;
 import com.mse.db.pharma.data.transaction.Order;
+import com.mse.db.pharma.data.transaction.Shipping;
 import com.mse.db.pharma.enums.ContragentTypes;
 import com.mse.db.pharma.enums.ItemTypes;
 
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -133,6 +135,25 @@ public class FXUtill {
 	}
 
 	/**
+	 * Utility method that builds table for the {@link Shipping}.
+	 * 
+	 * @param table
+	 * @param observableList
+	 * @param controller
+	 */
+	public static void buildShippingsTable(TableView<TableElement> table, ObservableList<TableElement> observableList,
+			MainController controller) {
+		addStringColumn(table, "#", "id", 30);
+		addStringColumn(table, "създаден", "createdAt", 0);
+		addStringColumn(table, "за област ", "district", 0);
+		addStringColumn(table, "начало на курса", "shippDate", 0);
+		addStringColumn(table, "дата за доставка", "deliveryDate", 0);
+		addStringColumn(table, "спедитор", "speditorCompanyName", 0);
+		addActionColumn(table, "редактиране", new ButtonCell("edit", controller));
+		table.setItems(observableList);
+	}
+
+	/**
 	 * Adding column in table with String values
 	 * 
 	 * @param table
@@ -163,5 +184,13 @@ public class FXUtill {
 		column.setMinWidth(100);
 		column.setMaxWidth(100);
 		table.getColumns().add(column);
+	}
+
+	public static void showError(String message) {
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setTitle("Грешка");
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+		alert.showAndWait();
 	}
 }

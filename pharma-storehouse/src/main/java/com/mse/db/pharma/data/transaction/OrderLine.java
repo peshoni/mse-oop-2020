@@ -4,7 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import com.mse.db.pharma.data.item.Item;
-import com.mse.db.pharma.fxutils.AtomicIndex;
+import com.mse.db.pharma.utils.AtomicIndex;
 
 public class OrderLine extends AtomicIndex {
 	private long orderId;

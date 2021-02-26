@@ -61,7 +61,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="buttonAddSupply" mnemonicParsing="false" prefWidth="200.0" text="създай доставка" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
+                        <Button fx:id="buttonAddSupply" mnemonicParsing="false" prefWidth="200.0" text="въведи доставка" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
                         <SplitPane dividerPositions="0.75" layoutX="14.0" layoutY="14.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="60.0">
                           <items>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
@@ -243,24 +243,24 @@
                                           <Label text="дата" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
                                           <Label text="спедитор" GridPane.rowIndex="1" />
                                           <Label text="телефон" GridPane.rowIndex="2" />
-                                          <Label text="Label" GridPane.columnIndex="1">
+                                          <Label GridPane.columnIndex="1">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                          <Label GridPane.columnIndex="1" GridPane.rowIndex="1">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                          <Label GridPane.columnIndex="1" GridPane.rowIndex="2">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
                                        </children>
                                     </GridPane>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="14.0" text="Спедиция номер: 898" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
+                                    <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="14.0" text="Спедиция номер: " AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
                                        <font>
                                           <Font size="18.0" />
                                        </font>

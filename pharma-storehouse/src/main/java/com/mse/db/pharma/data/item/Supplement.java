@@ -4,7 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class Supplement extends Item {
-	private String usefulFor;
+	private String usefulFor = "";
 
 	public Supplement() {
 	}

@@ -6,9 +6,9 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 
 import com.mse.db.pharma.data.contragents.Shipper;
-import com.mse.db.pharma.fxutils.AtomicIndex;
+import com.mse.db.pharma.utils.AtomicIndex;
 
-public class Shippings extends AtomicIndex {
+public class Shipping extends AtomicIndex {
 	private long id;
 	private Timestamp createdAt;
 	private String district;
@@ -16,10 +16,10 @@ public class Shippings extends AtomicIndex {
 	private Timestamp shippDate;
 	private Timestamp deliveryDate;
 
-	public Shippings() {
+	public Shipping() {
 	}
 
-	public Shippings(long id, String district, Shipper shipper, Timestamp shippDate, Timestamp deliveryDate) {
+	public Shipping(long id, String district, Shipper shipper, Timestamp shippDate, Timestamp deliveryDate) {
 		this.id = id;
 		this.district = district;
 		this.shipper = shipper;
@@ -29,7 +29,7 @@ public class Shippings extends AtomicIndex {
 
 	@Override
 	public String toString() {
-		return "Shippings{" + "createdAt=" + createdAt + ", district='" + district + '\'' + ", shippDate=" + shippDate
+		return "Shipping{" + "createdAt=" + createdAt + ", district='" + district + '\'' + ", shippDate=" + shippDate
 				+ ", deliveryDate=" + deliveryDate + '}';
 	}
 
@@ -79,6 +79,14 @@ public class Shippings extends AtomicIndex {
 
 	public void setShipper(Shipper shipper) {
 		this.shipper = shipper;
+	}
+
+	public String getSpeditorCompanyName() {
+		if (shipper == null) {
+			return "не е назначен";
+		} else {
+			return this.shipper.getCompanyName();
+		}
 	}
 
 	public void decorateStatement(PreparedStatement statement, boolean create) throws SQLException {

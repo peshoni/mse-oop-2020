@@ -1,12 +1,12 @@
 package com.mse.db.pharma.repository;
 
-import static com.mse.db.pharma.fxutils.StaticQueries.DELETE_ITEM;
-import static com.mse.db.pharma.fxutils.StaticQueries.INSERT_MEDICINE;
-import static com.mse.db.pharma.fxutils.StaticQueries.INSERT_SUPPLEMENT;
-import static com.mse.db.pharma.fxutils.StaticQueries.SELECT_ALL_MEDICINES;
-import static com.mse.db.pharma.fxutils.StaticQueries.SELECT_ALL_SUPPLEMENTS;
-import static com.mse.db.pharma.fxutils.StaticQueries.UPDATE_MEDICINE;
-import static com.mse.db.pharma.fxutils.StaticQueries.UPDATE_SUPPLEMENT;
+import static com.mse.db.pharma.utils.StaticQueries.DELETE_ITEM;
+import static com.mse.db.pharma.utils.StaticQueries.INSERT_MEDICINE;
+import static com.mse.db.pharma.utils.StaticQueries.INSERT_SUPPLEMENT;
+import static com.mse.db.pharma.utils.StaticQueries.SELECT_ALL_MEDICINES;
+import static com.mse.db.pharma.utils.StaticQueries.SELECT_ALL_SUPPLEMENTS;
+import static com.mse.db.pharma.utils.StaticQueries.UPDATE_MEDICINE;
+import static com.mse.db.pharma.utils.StaticQueries.UPDATE_SUPPLEMENT;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,14 +20,11 @@ import com.mse.db.pharma.data.item.Item;
 import com.mse.db.pharma.data.item.Medicine;
 import com.mse.db.pharma.data.item.Supplement;
 import com.mse.db.pharma.enums.PharmaTypes;
-import com.mse.db.pharma.fxutils.DBUtil;
+import com.mse.db.pharma.utils.DBUtil;
 
-/**
- * @author ivelin.dimitrov
- */
-public class ItemRepository {
+public class ItemRepository implements Repository {
 
-	Connection conn;
+	private Connection conn;
 
 	public ItemRepository(DBUtil dbUtil) {
 		this.conn = dbUtil.getConnection();

@@ -1,16 +1,16 @@
 package com.mse.db.pharma.repository;
 
-import static com.mse.db.pharma.fxutils.StaticQueries.DELETE_CONTRAGENT;
-import static com.mse.db.pharma.fxutils.StaticQueries.INSERT_CUSTOMER;
-import static com.mse.db.pharma.fxutils.StaticQueries.INSERT_SHIPPER;
-import static com.mse.db.pharma.fxutils.StaticQueries.INSERT_SUPPLIER;
-import static com.mse.db.pharma.fxutils.StaticQueries.SELECT_ALL_CUSTOMERS;
-import static com.mse.db.pharma.fxutils.StaticQueries.SELECT_ALL_SHIPPERS;
-import static com.mse.db.pharma.fxutils.StaticQueries.SELECT_ALL_SUPPLIERS;
-import static com.mse.db.pharma.fxutils.StaticQueries.UPDATE_CUSTOMER;
-import static com.mse.db.pharma.fxutils.StaticQueries.UPDATE_SHIPPER;
-import static com.mse.db.pharma.fxutils.StaticQueries.UPDATE_SUPPLIER;
 import static com.mse.db.pharma.repository.TransactionsRepository.getAddressObjectFromResultset;
+import static com.mse.db.pharma.utils.StaticQueries.DELETE_CONTRAGENT;
+import static com.mse.db.pharma.utils.StaticQueries.INSERT_CUSTOMER;
+import static com.mse.db.pharma.utils.StaticQueries.INSERT_SHIPPER;
+import static com.mse.db.pharma.utils.StaticQueries.INSERT_SUPPLIER;
+import static com.mse.db.pharma.utils.StaticQueries.SELECT_ALL_CUSTOMERS;
+import static com.mse.db.pharma.utils.StaticQueries.SELECT_ALL_SHIPPERS;
+import static com.mse.db.pharma.utils.StaticQueries.SELECT_ALL_SUPPLIERS;
+import static com.mse.db.pharma.utils.StaticQueries.UPDATE_CUSTOMER;
+import static com.mse.db.pharma.utils.StaticQueries.UPDATE_SHIPPER;
+import static com.mse.db.pharma.utils.StaticQueries.UPDATE_SUPPLIER;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,14 +27,14 @@ import com.mse.db.pharma.data.contragents.Customer;
 import com.mse.db.pharma.data.contragents.Shipper;
 import com.mse.db.pharma.data.contragents.Supplier;
 import com.mse.db.pharma.enums.PharmaTypes;
-import com.mse.db.pharma.fxutils.DBUtil;
+import com.mse.db.pharma.utils.DBUtil;
 
 /**
  * @author ivelin.dimitrov
  */
-public class ContragentsRepository {
+public class ContragentsRepository implements Repository {
 
-	Connection conn;
+	private Connection conn;
 
 	public ContragentsRepository(DBUtil dbUtil) {
 		this.conn = dbUtil.getConnection();

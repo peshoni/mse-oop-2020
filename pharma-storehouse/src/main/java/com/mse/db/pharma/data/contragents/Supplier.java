@@ -42,7 +42,6 @@ public class Supplier extends Contragent {
 		super.decorateStatement(preparedStatement, create);
 		preparedStatement.setString(index.getAndIncrement(), companyName);
 		preparedStatement.setString(index.getAndIncrement(), vat);
-
 		if (!create) {
 			preparedStatement.setLong(index.getAndIncrement(), getId());
 		}

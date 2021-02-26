@@ -1,4 +1,4 @@
-package com.mse.db.pharma.fxutils;
+package com.mse.db.pharma.utils;
 
 import com.mse.db.pharma.MainController;
 
@@ -12,11 +12,10 @@ public class ButtonCell implements Callback<TableColumn<TableElement, Void>, Tab
 	private String supportColumn = "";
 	private MainController controller;
 
-//ADD CONTROLLER REF
+	// ADD CONTROLLER REF
 	public ButtonCell(String supportColumnType, MainController controller) {
 		this.supportColumn = supportColumnType;
 		this.controller = controller;
-
 	}
 
 	@Override
