@@ -16,7 +16,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +32,7 @@ import com.mse.db.pharma.utils.DBUtil;
  * @author ivelin.dimitrov
  */
 public class ContragentsRepository implements Repository {
-
+	PreparedStatement statement = null;
 	private Connection conn;
 
 	public ContragentsRepository(DBUtil dbUtil) {
@@ -41,10 +40,32 @@ public class ContragentsRepository implements Repository {
 	}
 
 	public List<Customer> findAllCustomers() throws SQLException {
-		try (Statement statement = conn.createStatement()) {
-			return buildContragentCollectionFromResultSet(statement.executeQuery(SELECT_ALL_CUSTOMERS),
-					PharmaTypes.CUSTOMER).stream().map(it -> (Customer) it).collect(Collectors.toList());
+		long start = System.currentTimeMillis();
+		if (statement == null) {
+			System.out.println("set sttament hereee");
+			statement = conn.prepareStatement(SELECT_ALL_CUSTOMERS);
+		} else {
+			System.out.println("we have old one set sttament hereee");
+			statement = conn.prepareStatement(SELECT_ALL_CUSTOMERS);
 		}
+
+		// try (PreparedStatement statement =
+		// conn.prepareStatement(SELECT_ALL_CUSTOMERS)) {
+		List<Customer> result = buildContragentCollectionFromResultSet(statement.executeQuery(), PharmaTypes.CUSTOMER)
+				.stream().map(it -> (Customer) it).collect(Collectors.toList());
+		long end = System.currentTimeMillis();
+		System.out.println("time with prepared : " + (end - start) + "ms");
+		return result;
+		// }
+
+//		try (Statement statement = conn.createStatement()) {
+//			List<Customer> result = buildContragentCollectionFromResultSet(statement.executeQuery(SELECT_ALL_CUSTOMERS),
+//					PharmaTypes.CUSTOMER).stream().map(it -> (Customer) it).collect(Collectors.toList());
+//			long end = System.currentTimeMillis();
+//			System.out.println("time with executeQuery: " + (end - start) + "ms");
+//			return result;
+//		}
+
 	}
 
 	public List<Shipper> findAllShippers() throws SQLException {
